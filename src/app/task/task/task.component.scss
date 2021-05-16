@@ -1,0 +1,48 @@
+.select-wrapper {
+	.bootstrap-select {
+		border-bottom: 0px solid #FFF !important;
+	}
+}
+.filter-section {
+  display: inline-block;
+  width: 100%;
+}
+.task-bcrumb {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  .fa-edit {
+    font-size: 18px;
+  }
+}
+.color-orange {
+  color: #fb6b03;
+}
+.clear-filter {
+  font-size: 17px !important;
+  position: relative !important;
+  top: 4px;
+}
+.switch-section {
+  line-height: 48px;
+}
+.priority {
+  display: flex;
+  align-items: center;
+}
+.table-responsive {
+  overflow: inherit;
+}
+.flex-btn {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+}
+.button-process {
+  display: flex;
+  align-items: center;
+  justify-items: left;
+  justify-content: flex-end;
+}

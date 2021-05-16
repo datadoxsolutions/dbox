@@ -1,0 +1,72 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+          <ul class="breadcrumb breadcrumb-style ">
+            <!-- <li class="breadcrumb-item">
+                      <h4 class="page-title">Task</h4>
+                    </li> -->
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/task/task">
+                <i class="fas fa-edit"></i> Task</a>
+            </li>
+            <li class=" bcrumb-2">
+              <a onClick="return false;"> Task</a>
+            </li>
+            <!-- <li class="breadcrumb-item active">Inbox</li> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="row clearfix">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <form name="taskform" class="composeForm" (ngSubmit)="onSubmit(task)" #task="ngForm">
+            <h6>Well, it looks like there are no tasks for you! To get something started, you can:</h6>
+            <p>Create a task for yourself or assign it to someone else</p>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label>Name</label>
+                <div class="form-line input-field">
+                  <input type="text" name="name" class="form-control" placeholder="Enter the task name" ngModel required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <div class="form-line input-field">
+                  <textarea class="materialize-textarea" name="description" placeholder="Enter the description of task" ngModel required></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="form-line">
+                  <label>Assignee</label>
+                  <div class="ng-autocomplete">
+                    <ng-autocomplete [data]="usersData" [searchKeyword]="keyword" (selected)='selectEventTask($event)'
+                      placeHolder="Search User" (inputChanged)='onChangeSearchTask($event)' (inputCleared)="clearInputTask($event)"
+                      (inputFocused)='onFocusedTask($event)' [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                    </ng-autocomplete>
+                
+                    <ng-template #itemTemplate let-item>
+                      <div class="auto-complete-item"><i class="far fa-user"></i> <a [innerHTML]="item.fullName"></a></div>
+                    </ng-template>
+                    
+                    <ng-template #notFoundTemplate let-notFound>
+                      <div [innerHTML]="notFound"></div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+              <label>Use ↑ and ↓ to select and press Enter to confirm</label>
+              <h4>Matching people</h4>
+              <label>Use the search box above to find users</label>
+            </div>
+            <button class="btn btn-primary m-t-10 m-l-10" type="submit">Submit</button>
+            <button class="btn btn-danger m-t-10  m-l-10" type="button">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

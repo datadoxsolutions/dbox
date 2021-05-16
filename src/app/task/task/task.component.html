@@ -1,0 +1,107 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+              <ul class="breadcrumb breadcrumb-style ">
+                <li class="breadcrumb-item bcrumb-1">
+                  <a routerLink="/task/task" class="task-bcrumb">
+                    <i class="fas fa-edit m-r-10"></i> Queue</a>
+                </li>
+                <li class=" bcrumb-2  active">
+                  {{this.accountId}}
+                </li>
+              </ul>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4 button-process">
+            <!-- <a href="task/createtask">
+              <button data-toggle="tooltip" title="Create a task for yourself or assign it to someone else" class="btn btn-primary waves-effect m-r-15 flex-btn" type="button"><i class="material-icons">add</i> Create a task</button></a> -->
+            <!-- <a href="task/startprocess">
+              <button data-toggle="tooltip" title="Start a new process and then track its progress" class="btn btn-info waves-effect flex-btn" type="button"><i class="material-icons">add</i> Create new Process</button>
+            </a> -->
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card">
+          <div class="boxs mail_listing">
+            <div class="inbox-center table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <!-- <th class="text-center">
+                      <label class="form-check-label">
+                        <input type="checkbox">
+                        <span class="form-check-sign"></span>
+                      </label>
+                    </th> -->
+                    <th [attr.colspan]="!item?.assignee?.id ? '6' : '6'">
+                      <div class="inbox-header">
+                        <div class="mail-option no-pad-left">
+                          <div class="row col-md-12 email-btn-group">
+                              <div class="col-5 col-md-5 s12">
+                                <input type="text" class="form-control" (input)="searchText($event)" placeholder="Search by id">
+                              </div>
+                              <div class="col-4 col-md-4 s12">
+                                <select (change)="selectedOrder($event)">
+                                  <option value="created-desc" selected>Newest first</option>
+                                  <option value="created-asc">Oldest first</option>
+                                  <option value="due-desc">Due last</option>
+                                  <option value="due-asc">Due first</option>
+                                </select>
+                              </div>
+                              <div class="col-3 col-md-3 text-right switch switch-section">
+                                <label>Open
+                                  <input type="checkbox" (change)="changeStatus($event)">
+                                  <span class="lever"></span>Complete</label>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <thead style="background-color: #4181a9;color: #fff;">
+                  <th class="text-left">Queue</th>
+                  <th class="text-left">{{selectedTaskItem.appDefinitionKey === 'caseApp' ? "Case Id" : "Work unit Id"}}</th>
+                  <th class="text-left">Assign</th>
+                  <th class="text-left">Priority</th>
+                  <th class="text-right">Date</th>
+                  <th class="text-center">Action</th>
+                </thead>
+
+                <tbody>
+                  <tr class="unread" *ngFor="let item of userQueueList">
+                    <td class="hidden-xs"><a *ngIf="!item?.workId" routerLink="/task/{{accountId}}/{{item.id}}"> {{item.name}} </a> <span *ngIf="item?.workId"> {{item.name}} </span></td>
+                    <td class=""><a *ngIf="item?.workId" routerLink="/task/{{accountId}}/{{item.id}}">{{item.workId}}</a> <span *ngIf="!item?.workId">-N/A-</span></td>
+                    <td class="max-texts">
+                      <a *ngIf="item?.assignee?.fullName" routerLink="/task/{{accountId}}/{{item.id}}">
+                        <span class="label l-bg-purple shadow-style m-r-10"> {{item?.assignee?.fullName}}</span>
+                      </a>
+                      <span *ngIf="!item?.assignee?.fullName" class="label l-bg-purple shadow-style m-r-10"> {{'-N/A-'}}</span>
+                    </td>
+                    <td class="hidden-xs">
+                      <div class="priority"><i class="material-icons">low_priority</i>
+                      {{item.priority}}</div>
+                    </td>
+                    <td class="text-right color-orange">{{item?.created | date: 'MMM d, y h:mm:ss a' }} </td>
+                    <td class="text-center"> <button type="button"
+                      class="btn btn-info m-r-10 waves-effect"  *ngIf="!item?.assignee?.id" (click)="submitClaim(item?.id)">Claim</button> 
+                      <span *ngIf="item?.assignee?.id"> -N/A- </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="row">
+              <div class="col-sm-7 ">
+                <p class="p-15">Showing {{userTaskList?.data?.length}} of {{userQueueList.length}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

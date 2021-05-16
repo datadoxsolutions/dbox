@@ -1,0 +1,194 @@
+﻿/*
+ *  Document   : theme-logo.scss
+ *  Author     : RedStar Template
+ *  Description: This scss file for logo theme style classes
+ */
+@import '_theme-color-variables';
+
+.theme-logo {
+
+    .navbar {
+        background-color: transparent;
+    }
+    .navbar.active {
+	    background-color: $theme-logo !important;
+	    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+	    -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+        .nav {
+            > li {
+                > a {
+                    color: #fff;
+                }
+            }
+        }
+        .sidemenu-collapse i{
+            color: #fff;
+        }
+    }
+
+    .nav {
+        > li {
+            > a {
+                &:hover {
+                    background-color: $theme-logo-nav-anchor_hover;
+                    text-decoration: none;
+                }
+
+                &:focus {
+                    background-color: $theme-logo-nav-anchor_focus;
+                    text-decoration: none;
+                }
+            }
+        }
+
+    }
+
+    .bars {
+        color: $theme-logo-bar;
+    }
+
+    .sidebar {
+        .menu {
+            .list {
+                li{
+                    &.active {
+                        background-color: $theme-logo-menu-list-active;
+
+                        > :first-child {
+                            i, span {
+                                color: $theme-logo;
+                            }
+                        }
+                    }
+                    a{
+                        -moz-transition: all 0.3s;
+                        -o-transition: all 0.3s;
+                        -webkit-transition: all 0.3s;
+                        transition: all 0.3s;
+                        i, span {
+                            -moz-transition: all 0.3s;
+                            -o-transition: all 0.3s;
+                            -webkit-transition: all 0.3s;
+                            transition: all 0.3s;
+                        }
+                        &:hover {
+                            color: $theme-logo;
+                            i, span {
+                                color: $theme-logo;
+                            }
+                        }
+                    }
+                }
+
+              .ml-menu {
+                    background-color: $theme-logo-menu-list-submenu;
+                    .active{
+                        a{
+                            font-weight: 700;
+                        }
+                    }
+                    li.active a.toggled:not(.menu-toggle):before{
+                        background-color: $theme-logo;
+                        border-color: $theme-logo;
+                    }
+                }
+            }
+            .menu-toggle.toggled:after{
+                    color: $theme-logo;
+            }
+        
+        }
+
+        .legal {
+            background-color: $theme-logo-legal-bg;
+
+            .copyright {
+                a {
+                    color: $theme-logo !important;
+                }
+            }
+        }
+    }
+    
+    .breadcrumb li a {
+        color: $theme-logo !important;
+    }
+    
+    .card .header h2 strong {
+        color: $theme-logo !important;
+    }
+    
+    .page-item.active .page-link {
+        background-color: $theme-logo;
+        border-color: $theme-logo;
+        color: #FFFFFF;
+        border-radius: 50%;
+        box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-primary {
+        background-color: $theme-logo !important;
+        color: #fff !important;
+        border-color: $theme-logo !important;
+        &:hover {
+            background-color: $theme-logo !important;
+            color: #fff !important;
+        }
+        &:active {
+            background-color: $theme-logo !important;
+            color: #fff !important;
+        }
+        &:focus {
+            background-color: $theme-logo !important;
+            color: #fff !important;
+        }
+        &:disabled {
+            background-color: $theme-logo !important;
+            color: #fff !important;
+        }
+    }
+    .btn-outline-primary {
+        background: 0 0 !important;
+        color: $theme-logo !important;
+        border: 1px solid $theme-logo !important;
+        &:hover {
+            background: $theme-logo !important;
+            color: #fff !important;
+            border: 1px solid $theme-logo !important;
+        }
+    }
+    .timelineLabelColor strong{
+        color: $theme-logo !important;
+    }
+    .top-sidebar{
+        .horizontal-menu{
+            li{
+                &.active{
+                    > a {
+                        color: $theme-logo;
+                    }
+                }
+                a{
+                    -moz-transition: all 0.3s;
+                    -o-transition: all 0.3s;
+                    -webkit-transition: all 0.3s;
+                    transition: all 0.3s;
+                    &:hover {
+                        color: $theme-logo;
+                    }
+                }
+            }
+        }
+    }
+    
+    .nav-tabs > li > a:before {
+        border-bottom: 2px solid $theme-logo;
+    }
+}
+/*Logo Header Background Color*/
+.logo-logo{
+    .navbar-header{
+        background-color: $theme-logo;
+    }
+}

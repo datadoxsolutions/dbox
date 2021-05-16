@@ -1,0 +1,16 @@
+.align-center-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.support-box i {
+  font-size: 34px;
+  height: 34px;
+}
+.support-box:hover {
+  cursor: pointer;
+  background: #4caf50 !important;
+}
+.defination-section {
+  margin-left: 35px !important;
+}

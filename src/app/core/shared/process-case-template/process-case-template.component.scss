@@ -1,0 +1,129 @@
+.new-pgHead{
+	font-weight: 400;
+	padding: 0px 10px;
+}
+.process-container {
+  padding-top: 0px;
+}
+.new-pgIcon{
+	padding: 0px 7px;
+}
+.new-HeadTop {
+	padding: 5px;
+  background-color: #337ab7;
+  color: #FFF;
+  border-radius: 10px 10px 0px 0px;
+}
+.process-case-bcrumb {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  .fa-recycle {
+    font-size: 18px;
+  }
+}
+.new-HeadTop i{
+	color:#FFF;
+}
+.fi-sz-16 i{
+	font-size:16px;
+	cursor: pointer;
+}
+.ft-sz-12{
+	font-size:12px;
+}
+.txt-sz-10{
+	font-size: 10px;
+}
+.manage-imgpopup .img-popup img{
+	width:100% !important;
+	border-radius: 0px !important;
+}
+.ri8-vrLine {
+	border-right:1px solid #eee;
+}
+.ri8-vrLine h2{
+	margin-bottom: 10px;
+}
+.fi-sz-16 .btn-info:hover,  .fi-sz-16 .btn-info:focus{
+    background-color: #00b0e4 !important;
+    color: #fff !important;
+    border-color: #00b0e4 !important;
+}
+.review-img {
+  padding-left: 0px !important;
+}
+.border-comments{
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px !important;
+}
+.review-img .text {
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.2);
+  padding: 12px 14px;
+  background: #0a2f97;
+  color: #fff;
+  text-transform: uppercase;
+}
+.commentBox{
+	font-size: 16px;
+	color:#000;
+}
+.mar-bt0{
+	margin-bottom:0px !important;
+}
+.txtBox{
+	width: 100%;
+}
+.colDay-blue{
+  color: #007bff;
+  font-size: 11px;
+}
+.comment-section {
+  display: inline-flex;
+    flex-direction: column;
+    width: 100%;
+    padding-right: 15px;
+}
+.container-comment100-form-btn {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.selectedRow {
+  background: #efefef;
+  cursor: pointer;
+}
+.cursor-pointer {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+}
+.review-img2 {
+  padding-left: 0px;
+  padding-top: 0px;
+}
+.task-item-name-date {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+.review-img2 .text2 {
+  border: 2px solid #fff;
+  box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.2);
+  padding: 5px 5px;
+  background: #0a2f97;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 11px;
+  width: 34px;
+  display: inline-block;
+  text-align: center;
+}
+.modal-lg, .modal-xl {
+  max-width: 1024px !important;
+}

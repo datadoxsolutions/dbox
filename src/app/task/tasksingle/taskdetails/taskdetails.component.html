@@ -1,0 +1,304 @@
+<div class="row">
+  <div class="col-lg-5 col-md-7 col-sm-7 col-xs-7">
+    <div class="card">
+      <div class="body">
+        <div class="row clearfix">
+          <div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
+            <div class="panel-group collapsible" id="accordion_1" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-primary">
+                <div class="panel-heading collapsible-header" role="tab" id="headingOne_1">
+                  <h4 class="panel-title">
+                    <i class="material-icons">account_circle</i>
+                    <a role="button" data-toggle="collapse" data-parent="#accordion_1" href="#collapseOne_1"
+                      aria-expanded="true" aria-controls="collapseOne_1">
+                      People
+                    </a>
+                    <i class="material-icons" data-toggle="modal" data-target="#select_person"
+                      style="cursor: pointer;">add</i>
+                  </h4>
+                </div>
+                <div id="collapseOne_1" class="panel-collapse collapse in show" role="tabpanel"
+                  aria-labelledby="headingOne_1">
+                  <div class="panel-body">
+                    <p>Peoples</p>
+                    <div class="row custom-people-row" *ngFor="let people of involvePeopleList">
+                      <div class="review-img2">
+                        <span class="text2">{{people.firstName | firstChar}}{{people.id | firstChar}}</span>
+                      </div>
+                      <div class="col people-item">
+                        <h6 style="text-transform: capitalize;">{{people.fullName}}
+                        </h6>
+                        <a href="javascript:void(0)" (click)="removeUser(people)"><i
+                            class="material-icons">clear</i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel panel-primary">
+                <div class="panel-heading collapsible-header" role="tab" id="headingTwo_1">
+                  <h4 class="panel-title">
+                    <i class="material-icons">attach_file</i>
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion_1"
+                      href="#collapseTwo_1" aria-expanded="false" aria-controls="collapseTwo_1">
+                      Related Content
+                    </a>
+                    <i class="material-icons" data-toggle="modal" data-target="#related_content"
+                      style="cursor: pointer;">add</i>
+                  </h4>
+                </div>
+                <div id="collapseTwo_1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo_1">
+                  <div *ngIf="contentData?.data.length == 0" class="panel-body">
+                    No Content found
+                  </div>
+
+                  <div class="files" style="width: 100%; padding-top: 20px;">
+                    <div class="row col-md-12" style="margin-left: 0px;padding-left: 0px;padding-right: 0px;">
+                      <div class="col-md-12 m-b-10 row-border" *ngFor="let item of contentData?.data">
+                        <div class="file-name">
+                          <i class="fas fa-file-{{item.simpleType}}"></i>
+                          <div>{{item.name}}</div>
+                        </div>
+                        <div class="file-date">
+                          Added By {{item.created | timeAgo}}
+                        </div>
+                        <div class="action-buttons">
+                          <a class="download m-r-10" target="_blank" download="{{item.name}}"
+                            href="{{urldownload}}DB-task/app/rest/content/{{item.id}}/raw"
+                            (click)="$event.stopPropagation();"><i class="fas fa-file-download"></i></a>
+                          <a class="clear" (click)="clearContent(item.id)"><i class="fas fa-trash-alt"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="panel panel-primary">
+                <div class="panel-heading collapsible-header" role="tab" id="headingThree_1">
+                  <h4 class="panel-title">
+                    <i class="material-icons">list</i>
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion_1"
+                      href="#collapseThree_1" aria-expanded="false" aria-controls="collapseThree_1">
+                      Sub Task
+                    </a>
+                    <i class="material-icons" data-toggle="modal" data-target="#sub_task"
+                      style="cursor: pointer;">add</i>
+                  </h4>
+                </div>
+                <div id="collapseThree_1" class="panel-collapse collapse" role="tabpanel"
+                  aria-labelledby="headingThree_1">
+                  <div class="panel-body">
+                    <div class="m-b-15"></div>
+                    <ul class="list-group">
+                      <li class="list-group-item" *ngFor="let item of subTaskLists">
+                        <h6 class="m-0">{{item?.name}}</h6>
+                        <div style="margin-top:10px">{{item?.description}}</div>
+                        <span class="assign-task-name">Assigned to <strong class="strong">
+                            {{item?.assignee?.fullName}}</strong></span>
+                        <span class="colDay-blue pull-right date-time">Created
+                          {{item?.created | timeAgo}}</span>
+                      </li>
+                    </ul>
+                    <span *ngIf="subTaskLists?.length === 0">No sub task are found</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7 col-md-5 col-sm-5 col-xs-5">
+    <div class="card">
+      <div class="header">
+        <div class="font-icon p-0 mar-bt0">
+          <div class="col-md-10 p-0 icon-class">
+            <p class="m-t-15 commentBox">Comments</p>
+          </div>
+          <div class="col-md-2 icon-preview fi-sz-16 text-right">
+            <i class="fas fa-plus m-b-5" (click)="isShow=!isShow"></i>
+          </div>
+        </div>
+        <div *ngIf="isShow">
+          <textarea class="form-control txtBox" id="exampleFormControlTextarea1" [(ngModel)]="commentMsg"
+            placeholder="Enter a comment to add to this task" rows="3"></textarea>
+          <div class="buttons-section">
+            <button class="btn btn-primary pull-right m-t-10 m-l-10" type="button"
+              (click)="submitComment()">Submit</button>
+            <button class="btn btn-danger pull-right m-t-10" type="button" (click)="cancel()">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="">
+        <div class="review-block">
+          <div class="col-lg-12 comment-item" *ngFor="let item of commentDetails">
+            <div class="review-img">
+              <span class="text">{{item?.createdBy.substring(0, 2)}} </span>
+            </div>
+            <div class="col">
+              <h5 class="m-b-4" style="text-transform: capitalize;"> <strong> {{item?.message?.Sub}} -
+                  {{item?.createdBy}} </strong>
+                <span class="float-right m-r-10 text-date">{{item?.created | date: 'MMM d, y, h:mm a'}} -
+                  {{item?.created | timeAgo}} </span>
+              </h5>
+              <div>
+                <span> {{item?.message?.From}} </span> to
+                <span class="toMail"> {{item?.message?.To}} </span> -  {{item?.message?.Cc ? "cc -" + item?.message?.Cc  : ""}} 
+              </div>
+              <p class="m-t-15 m-b-15">
+                {{item?.message?.Body}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="modal fade" id="sub_task" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Sub Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form name="subTaskform" (ngSubmit)="submitSubTask(subTask)" #subTask="ngForm">
+          <div class="col-lg-12">
+            <div class="form-group">
+              <label>Name</label>
+              <div class="form-line input-field">
+                <input type="text" id="email_address" name="name" class="form-control" placeholder="Name" ngModel>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <div class="form-line input-field">
+                <textarea id="email_address" name="description" class="materialize-textarea" placeholder="Description"
+                  ngModel></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-line">
+                <label>Assignee</label>
+                <div class="ng-autocomplete">
+                  <ng-autocomplete [data]="usersData" [searchKeyword]="keyword" (selected)='selectEventTask($event)'
+                    placeHolder="Search User" (inputChanged)='onChangeSearchTask($event)'
+                    (inputCleared)="clearInputTask($event)" (inputFocused)='onFocusedTask($event)'
+                    [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                  </ng-autocomplete>
+
+                  <ng-template #itemTemplate let-item>
+                    <div class="auto-complete-item"><i class="far fa-user"></i> <a [innerHTML]="item.fullName"></a>
+                    </div>
+                  </ng-template>
+
+                  <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <button type="submit" class="btn btn-info waves-effect m-r-15">Save</button>
+            <button type="button" class="btn btn-danger waves-effect cancel" data-dismiss="modal">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="related_content" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Related Content</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="#">
+          <div class="file-field input-field">
+            <div class="btn">
+              <span>File</span>
+              <input type="file" name="fileUpload" ng2FileSelect [uploader]="uploader"
+                (change)="onFileSelected($event)">
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger waves-effect cancel hide" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="select_person" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Select Person</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="col-lg-12">
+            <div class="form-group">
+              <div class="form-line">
+                <div class="ng-autocomplete">
+                  <ng-autocomplete [data]="usersData" [searchKeyword]="keyword" (selected)='selectEvent($event)'
+                    placeHolder="Search User" (inputChanged)='onChangeSearch($event)'
+                    (inputCleared)="clearInput($event)" [itemTemplate]="itemTemplate"
+                    [notFoundTemplate]="notFoundTemplate">
+                  </ng-autocomplete>
+
+                  <ng-template #itemTemplate let-item>
+                    <div class="auto-complete-item"><i class="far fa-user"></i> <a [innerHTML]="item.fullName"></a>
+                    </div>
+                  </ng-template>
+
+                  <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                  </ng-template>
+                </div>
+               
+              </div>
+
+
+
+            </div>
+            <label>Use ↑ and ↓ to select and press Enter to confirm</label>
+            <h4>Matching people</h4>
+            <label>Use the search box above to find users</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger waves-effect cancel hide" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

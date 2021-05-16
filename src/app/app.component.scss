@@ -1,0 +1,38 @@
+.user-top-name {
+  margin-left: 11px;
+  font-weight: 600;
+  color: #04399d;
+}
+
+.task-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 7px;
+  i {
+    margin-right: 5px;
+  }
+  
+}
+
+#leftsidebar a.menuListIcon.active {
+  color: #4598c9;
+}
+.selected {
+  background-color: #d7d7d7;
+  border-radius: 6px;
+}
+
+.task-section:hover {
+  background-color: #d7d7d7 !important;
+  border-radius: 6px;
+}
+
+.menuListIcon i {
+  position: relative;
+  top: 3px;
+}
+
+.nav  {
+  position: relative;
+}

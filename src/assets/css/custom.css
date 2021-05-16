@@ -1,0 +1,109 @@
+.breadcrumb li a .fa-home {
+  font-size: 17px;
+  position: relative;
+  top: 2px;
+  float: left;
+  padding-right: 6px;
+  color: #9aa0ac;
+}
+
+.panel-group .panel .panel-title {
+  margin-bottom: 0;
+  font-size: 16px;
+  width: 100% !important;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 15px 10px 15px !important;
+}
+
+.panel-group .panel .panel-title .material-icons {
+  line-height: 23px !important;
+}
+.panel-group .panel .panel-heading a {
+  display: block !important;
+  padding: 0px !important;
+  width: 100% !important;
+}
+
+.side-closed.side-closed-hover .sidebar .menu .list .ml-menu li a{padding-left:16px !important;}
+
+#leftsidebar {
+  width: 218px;
+}
+.sidebar .menu .list a span {
+  font-size: 13px;
+}
+.sidebar .menu .list a {
+  font-size: 13px;
+  margin: 8px 5px 0 5px;
+}
+section.content {
+  margin: 70px 0px 0 215px;
+}
+.padding-left-0 {
+  padding-left: 0;
+}
+.margin-b-7 {
+  margin-bottom: 7px;
+}
+.navbar-brand {
+  padding: 0px 11px 4px 21px !important;
+  display: flex;
+  margin-right: 0;
+  width: 100%;
+  align-items: center;
+}
+.navbar-header {
+  width: 218px;
+}
+.sidemenu-collapse {
+  padding: 0 20px 0 25px;
+}
+.sidebar .menu .list .ml-menu li a {
+  padding-left: 15px !important;
+}
+.side-closed.side-closed-hover section.content {
+  margin-left: 215px;
+}
+.side-closed #leftsidebar {
+  width: 60px;
+}
+.side-closed.side-closed-hover #leftsidebar.sidebar {
+  width: 218px;
+}
+.side-closed .sidebar li a {
+  text-align: center;
+}
+.side-closed .sidebar li ul a {
+  text-align: left;
+}
+
+.table tbody tr td, .table tbody tr th {
+  padding: 10px 21px;
+}
+
+#leftsidebar a.menuListIcon.active span {
+  color: #4598c9;
+  margin-left: 2px;
+}
+
+.menuListIcon i {
+  top: 0;
+  position: none;
+}
+.login100-form {
+  background-color: rgba(245, 245, 245, 0.9);
+  width: 380px;
+	display: block;
+  padding: 34px 15px;
+  margin:0px
+}
+.login100-form .wrap-input100 {
+  background-color: #fff;
+}
+.card {
+  box-shadow: 0 1px 5px rgba(0,0,0,0.25) !important;
+}

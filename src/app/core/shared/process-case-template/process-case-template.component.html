@@ -1,0 +1,208 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="process/process"  class="process-case-bcrumb">
+                <i class="fas fa-recycle m-r-10"></i> {{title}}</a>
+            </li>
+            <!-- <li class="breadcrumb-item active">Inbox</li> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <div class="card">
+          <div class="body process-container">
+            <div id="plist" class="people-list">
+              <div class="form-line">
+                <div class="chat-about">
+                  <div class="chat-with new-HeadTop row">
+                    <div class="col-md-10 new-pgHead m-0">{{currentStatus | titlecase}} {{title}}</div>
+                    <div class="col-md-2 m-0 p-0">
+                      <a href="/dbox/process/startprocess{{selected?.id ? '?processId=' + selected?.id : ''}}">
+                        <i class="material-icons pull-right new-pgIcon" data-toggle="tooltip"
+                        data-original-title=" Start A Process">add</i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-line">
+                <div class="chat-about m-t-10 fi-sz-16 row">
+                  <div class="input-field col-md-7 m-0">
+                    <select name="sortby" (change)="sortBy($event)">
+                      <option value="created-desc">Newest First</option>
+                      <option value="created-asc">Oldest First</option>
+                    </select>
+                  </div>
+                  <div class="m-t-10 col-md-5" role="group">
+                    <a _ngcontent-yrh-c1="" aria-expanded="false" aria-haspopup="true"
+                      class="dropdown-toggle pull-right" data-toggle="dropdown" href="#" onclick="return false;"
+                      role="button">
+                      <i class="fa fa-filter" aria-hidden="true"></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                      <li>
+                        <a href="#" onClick="return false;" (click)="stateChange('running')">Running</a>
+                      </li>
+                      <li>
+                        <a href="#" onClick="return false;" (click)="stateChange('completed')">Completed</a>
+                      </li>
+                      <li>
+                        <a href="#" onClick="return false;" (click)="stateChange('all')">All</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-content">
+                <div id="chat_user">
+                  <ul class="chat-list list-group m-b-0">
+                    <li class="list-group-item clearfix" *ngFor="let item of processList.data"
+                      (click)="onProcess(item)" [ngClass]="(item.id == selected.id) ? 'selectedRow' : 'nonSelectedRow'">
+                      <div class="pull-right">
+                        <a class="col-primary pull-right txt-sz-10" href="javascript:void(0)">Started {{item.started | timeAgo}}</a>
+                      </div>
+                      <p class="title font-bold ng-binding ft-sz-12 m-0">
+                        {{item?.name}}
+                      </p>
+                      <div class="summary">
+                        <span ng-if="processInstance.startedBy" class="ng-binding ng-scope ft-sz-12">
+                          Started by {{ item?.startedBy.id }}
+                        </span>
+                      </div>
+                      <div class="detail ng-binding" style="font-size:10px;">
+                        {{item?.processDefinitionName}}
+                      </div>
+                    </li>
+                    <li class="list-group-item" *ngIf="!processList.data || processList.data?.length == 0">
+                        No {{currentStatus | titlecase}} Process found
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <div class="card">
+          <div class="chat">
+            <div class="chat-header clearfix manage-imgpopup">
+              <h3 class="pull-left"> {{processInstance.name}} </h3>
+              <button class="btn btn-primary pull-right waves-effect" type="button" data-type="cancel" (click)="onCancel()">Cancel
+              </button>
+              <!-- <button class="btn btn-primary pull-right m-r-10 waves-effect" type="button" data-toggle="modal"
+                data-target=".bd-example-modal-lg" [disabled]='true'>Show diagram</button> -->
+              <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+                aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="myLargeModalLabel">Diagram</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <!-- <div class="modal-body img-popup">
+                      <img class="img-responsive thumbnail" src="{{env?.restapi_endpoin}}flowable-rest/service/runtime/process-instances/{{processInstance?.id}}/diagram"/>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-7 ri8-vrLine">
+                <div class="header ">
+                  <p class="commentBox">Active tasks</p>
+                  <ul class="list-group">
+                    <li class="list-group-item cursor-pointer" *ngFor="let act of taskActiveList?.data" (click)="redirectTask(act)">
+                      <div class="review-img2 m-r-10">
+                        <span class="text2" *ngIf="act?.assignee">{{act?.assignee?.firstName | firstChar}}{{act?.assignee?.id | firstChar}}</span>
+                      </div>
+                      <div style="width: 100%">
+                        <div class="task-item-name-date">
+                          <p class="m-0">{{ act?.name }}</p>
+                          <span class="colDay-blue pull-right">Created {{act?.created | timeAgo}}</span>
+                        </div>
+                        <span>Assigned to {{act?.assignee?.id ? act?.assignee?.id : 'Nobody'}}</span>
+                        
+                      </div>
+                    </li>
+                    <li class="list-group-item" *ngIf="!taskActiveList?.data || taskActiveList?.data?.length == 0">
+                        No Active task found
+                    </li>
+                  </ul>
+                </div>
+                <div class="header">
+                  <p class="commentBox">Completed tasks</p>
+                  <ul class="list-group" *ngFor="let comp of taskCompleteList?.data">
+                    <li class="list-group-item">
+                      <p class="m-0">{{ comp?.name }}</p>
+                      <span>Assigned to {{comp?.assignee?.id}}</span>
+                      <span class="colDay-blue pull-right">Took {{ comp?.duration | duration}}</span>
+                    </li>
+                  </ul>
+                  <ul>
+                    <li class="list-group-item" *ngIf="!taskCompleteList?.data ||  taskCompleteList?.data?.length == 0">
+                        No tasks have been completed yet...
+                    </li>
+                  </ul>
+                  <!-- 
+                                <div class="">
+                                    <p>No tasks have been completed yet...</p>
+                                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="font-icon p-0 mar-bt0">
+                  <div class="col-md-10 p-0 icon-class">
+                    <p class="m-t-15 commentBox">Comments</p>
+                  </div>
+                  <div class="col-md-2 icon-preview fi-sz-16">
+                    <i class="fas fa-plus m-b-5" (click)=" isShow=!isShow"></i>
+                  </div>
+                </div>
+                <div class="comment-section" *ngIf="isShow">
+                  <textarea class="form-control txtBox" id="exampleFormControlTextarea1"
+                    placeholder="Enter a comment to add to this proccess" [(ngModel)]="commentMsg" rows="3"></textarea>
+                  <div class="buttons-section">
+                    <button class="btn btn-primary pull-right m-t-10 m-l-10" type="button"
+                      (click)="submitComment()">Submit</button>
+                    <button class="btn btn-danger pull-right m-t-10" type="button" (click)="cancel()">Cancel</button>
+                  </div>
+                </div>
+                <div class="header">
+                  <ul>
+                    <li class="list-group-item" *ngIf="!commentList?.data || commentList?.data?.length == 0">
+                        No comment found...
+                    </li>
+                  </ul>
+                  
+                  <div class="row border-comments" *ngFor="let item of commentList?.data">
+                    <div class="review-img">
+                      <span class="text">{{item?.createdBy.substring(0, 2)}}</span>
+                    </div>
+                    <div class="col">
+                      <h6 class="m-b-15" style="width: 100%; text-transform: capitalize;">{{item?.createdBy}}
+                        <span class="float-right m-r-10 text-muted"> {{item?.created | timeAgo}} </span>
+                      </h6>
+                      <p class="m-t-15 m-b-15">
+                        {{item?.message}}
+                      </p>
+                    </div>
+                  </div>
+                  
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

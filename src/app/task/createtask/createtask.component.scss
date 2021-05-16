@@ -1,0 +1,20 @@
+.auto-complete-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 20px;
+}
+.autocomplete-container .input-container input {
+  font-size: 14px;
+  box-sizing: border-box;
+  box-shadow: none;
+  outline: 0;
+  background-color: #fff;
+  color: rgba(0,0,0,.87);
+  width: 100%;
+  padding: 0 0px !important;
+  border-bottom: 1px solid #9e9e9e !important;
+}
+.autocomplete-container {
+  box-shadow: none !important;
+}

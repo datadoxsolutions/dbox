@@ -1,0 +1,100 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <!-- <li class="breadcrumb-item">
+                          <h4 class="page-title">Process</h4>
+                        </li> -->
+            <li class="breadcrumb-item bcrumb-1 ">
+              <a routerLink="process/process" class="task-bcrumb">
+                <i class="fas fa-recycle m-r-10"></i> Process</a>
+            </li>
+            <li class=" bcrumb-2">
+              <a onClick="return false;"> Start Process</a>
+            </li>
+            <!-- <li class="breadcrumb-item active">Inbox</li> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <div class="card">
+          <div class="body">
+            <div id="plist" class="people-list">
+              <div class="form-line custom-form-line">
+                <div class="chat-about">
+                  <div class="chat-with new-HeadTop row">
+                    <div class="col-md-12 new-pgHead m-0">
+                      <a href="/dbox/process">
+                        <button class="btn btn-primary waves-effect" type="button">
+                          << Back to process instances</button> </a> </div> </div> </div> </div> <div
+                            class="tab-content">
+                            <div id="chat_user">
+                              <ul class="chat-list list-group m-b-0">
+                                <li class="list-group-item clearfix" *ngFor="let item of processList.data">
+                                  <p class="title font-bold ng-binding ft-sz-12 m-0">
+                                    {{item.name}}
+                                  </p>
+                                  <div class="summary">
+                                    <span ng-if="processInstance.startedBy" class="ng-binding ng-scope ft-sz-12">
+                                      Started by {{ item.description }}
+                                    </span>
+                                  </div>
+                                  <div class="detail ng-binding" style="font-size:10px;">
+                                    {{item.processDefinitionName}}
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+              <div class="card">
+                <div class="chat">
+                  <div class="chat-header clearfix manage-imgpopup">
+                    <div class="chat-about p-0">
+                      <div class="chat-with">{{processInstance.processDefinitionName || processInstance.name}} - {{currentDate}}</div>
+                      <!-- <div class="chat-num-messages">Started by: {{processInstance.startedBy.firstName}} {{processInstance.startedBy.lastName}} Started: {{processInstance.started | timeAgo}}</div> -->
+                    </div>
+                    <button class="btn btn-primary pull-right waves-effect" type="button" (click)="startProcess()">Start
+                      process</button>
+                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+                      aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="myLargeModalLabel">Diagram</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body img-popup">
+                            <img alt="" class="img-responsive thumbnail"
+                              src="assets/images/image-gallery/thumb/thumb-1.jpg">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5">
+                      <div class="font-icon p-0 mar-bt0">
+                        <div class="col-md-2 icon-preview fi-sz-16">
+                        </div>
+                      </div>
+                      <div class="header">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+</section>

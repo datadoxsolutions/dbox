@@ -1,0 +1,552 @@
+<section class="content">
+  <div class="container-fluid" #singleTaskPage>
+    <div class="block-header">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 with-claim-button left-align">
+              <ul class="breadcrumb breadcrumb-style ">
+                  <li class="breadcrumb-item bcrumb-1">
+                      <a routerLink="/task/task" class="task-bcrumb">
+                          <i class="fas fa-edit m-r-10"></i> Queue</a>
+                  </li>
+                  <li class="bcrumb-2">
+                    <a routerLink="/task/{{accountId}}"> {{accountId}}</a>
+                  </li>
+                  <!-- <li class="breadcrumb-item active">Compose</li> -->
+              </ul>
+              <div class="steps-flow">
+                <ul class="horizontal large-empty-symbols steps-indicator steps-3">
+                  <li class="default" *ngFor="let item of listOfqueueData">
+                    <a>
+                      <div class="label">{{item}}</div>
+                      <div class="step-indicator" [ngClass]="{'currentInd' : item == accountId, 'default-in': defaultqueu.indexOf(item) >= 0, 'next-in' : item != accountId }"> </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <ul>
+                <li *ngIf="!taskDetails?.assignee?.id"> <button type="button"
+                  class="btn btn-info m-r-10 waves-effect" (click)="submitClaim(taskDetails?.id)">Claim</button> </li>
+                  <li *ngIf="taskDetails?.parentTaskId && taskDetails?.endDate == null"> <button type="button"
+                    class="btn btn-info m-r-10 waves-effect" (click)="complete()">Complete</button> </li>
+              </ul>
+            </div>
+        </div>
+      </div>
+
+    <div class="card margin-b-7">
+      <div class="boxs mail_listing" id="leftBoxData">
+        <div class="row custom-indexer-info first-row">
+          <div class="row-d" style="position: relative;">
+            <span class="strong">Assignee</span> : {{taskDetails?.assignee?.fullName || 'Assigne To nobody'}} <i class="material-icons" data-toggle="modal" data-target="#select_person"
+            style="cursor: pointer;position: absolute;top: -3px;right: -24px;"><span data-toggle="tooltip" data-original-title="Change Assignee"></span>add</i>
+          </div>
+          <div class="row-d">
+            <span class="strong">Due</span>: {{ taskDetails?.dueDate ||  taskDetails?.created | date: 'mediumDate' }}
+          </div>
+          <div class="row-d">
+            <span class="strong">Part of process: </span> <a href="/process/index?process_id={{taskDetails?.processInstanceId}}">{{taskDetails?.processDefinitionName}} - {{taskDetails?.created | date: 'mediumDate'}}</a>
+          </div>
+          <div class="row-d">
+            <span class="strong">Ended</span>: {{taskDetails?.endDate ? (taskDetails?.endDate | timeAgo) : '-N/A-'}} 
+          </div>
+          <div class="row-d">
+            <span class="strong">Duration</span>: {{ taskDetails?.duration / 60000 | number : '1.0' }} minutes
+          </div>
+        </div>
+        <div class="row custom-indexer-info">
+          <div class="col-lg-2">
+            <span class="strong"><a data-toggle="tooltip" [attr.data-original-title]="involvePeople"> {{ taskDetails?.involvedPeople?.length > 0 ? taskDetails?.involvedPeople?.length + ' people involved' : 'No people involved' }}</a></span>
+          </div>
+          <div class="col-lg-2">
+            <span class="strong"><a> {{ contentData?.data?.length > 0 ? contentData?.data?.length + ' content items' : 'No content items' }}</a></span>
+          </div>
+          <div class="col-lg-2">
+            <span class="strong"><a>{{ commentDetails?.total ? commentDetails?.total : 'No' }} comments</a></span> 
+          </div>
+          <div class="col-lg-4 text-center" style="display: flex;justify-content: space-between;">
+              <div class="strong"><a> {{ subTasklists?.length ? subTasklists?.length : 'No' }} sub tasks</a></div> 
+              <div class="switch">
+                  <label>Show Form
+                      <input type="checkbox" id="show-form-details" [(ngModel)]="isChecked" (change)="checkValue($event)">
+                      <span class="lever"></span>Show Details</label>
+              </div>
+          </div>
+          <div class="col-lg-2">
+            <button class="btn btn-primary pull-right m-r-10 waves-effect" type="button" data-toggle="modal" data-target=".compareduplicate" style="font-size: 12px">Compare Duplicate</button>
+          </div>
+          <div class="modal fade bd-diagram-example-modal-lg" tabindex="-1" role="dialog"
+                                    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="myLargeModalLabel">Diagram</h5>
+                          <button type="button" class="close" data-dismiss="modal"
+                              aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <!-- <div class="modal-body img-popup">
+                          <img class="img-responsive thumbnail" src="{{env?.restapi_endpoin}}flowable-rest/service/runtime/process-instances/{{taskDetails?.processInstanceId}}/diagram"/>
+                      </div> -->
+                  </div>
+              </div>
+          </div>
+
+
+          <div class="modal fade compareduplicate" tabindex="-1" role="dialog"
+                                    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                      <div class="modal-header" style="border-bottom: 1px solid #ddd">
+                          <h5 class="modal-title" id="comare-title">Compare Duplicate</h5>
+                          <button type="button" class="close" data-dismiss="modal"
+                              aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body img-popup">
+                        <div class="row">
+                          <div class="col-md-6 table-view">
+                            <h5 class="color:#444; font-size: 600">Old Preview Data</h5>
+                            <div class="row">
+                              <div class="col-md-6">
+                                Invoice NO
+                              </div> 
+                              <div class="col-md-6">
+                                12345
+                              </div> 
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                Amount
+                              </div> 
+                              <div class="col-md-6">
+                                32.4
+                              </div> 
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                PO. NO.
+                              </div> 
+                              <div class="col-md-6 text-red">
+                                324
+                              </div> 
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                Image
+                              </div> 
+                              <div class="col-md-6">
+                                -N/A-
+                              </div> 
+                            </div>
+                          </div>
+                          <div class="col-md-6 table-view bg-sec-grey">
+                            <h5 class="color:#444; font-size: 600">New Preview Data</h5>
+                            <div class="row">
+                              <div class="col-md-6">
+                                Invoice NO
+                              </div> 
+                              <div class="col-md-6 text-red">
+                                12345
+                              </div> 
+                            </div>
+                            <div class="row ">
+                              <div class="col-md-6">
+                                Amount
+                              </div> 
+                              <div class="col-md-6">
+                                32.4
+                              </div> 
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                PO. NO.
+                              </div> 
+                              <div class="col-md-6 text-red">
+                                324
+                              </div> 
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6">
+                                Image
+                              </div> 
+                              <div class="col-md-6">
+                                -N/A-
+                              </div> 
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="itemContainer" *ngIf="!taskDetails?.parentTaskId" [hidden]="isDetailsShow">
+      <div class="col-xs-12 col-sm-12" [ngClass]="(pdfUrl != undefined) ? 'col-md-4 col-lg-4' : 'col-md-8 col-lg-8'">
+        <div class="card">
+          <div class="boxs mail_listing">
+            
+            <div class="row">
+              <div class="col-lg-12">
+                <div *ngIf="!taskDetails?.formKey && formDataLoaded" class="no-form"> Form is not Available for this task</div>
+                <form id="form_advanced_validation" *ngIf="taskDetails?.formKey" class="composeForm" name="singleTask" (ngSubmit)="updateOpenTask(singleTask)" #singleTask="ngForm">
+                  <div class="row" id="leftSide" style="position: relative; margin-left: -27px;max-height: 600px;overflow-x: scroll;">
+
+                    <div *ngIf="loader" class="loader-div">
+                        <div class="preloader">
+                          <div class="spinner-layer pl-red">
+                            <div class="circle-clipper left">
+                              <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                              <div class="circle"></div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    
+                    <div [ngClass]="(processingForm?.fields[i].type != 'headline-with-line' && processingForm?.fields[i].type != 'headline' && processingForm?.fields[i].type != 'horizontal-line') ? (pdfUrl != undefined || processingForm?.fields[i].type == 'multi-line-text') ? 'col-md-12' : 'col-md-6' : 'col-md-12'" *ngFor="let formitem of processingForm?.fields; index as i">
+
+                      <div class="inbox-center table-responsive" *ngIf="formitem.type === 'headline-with-line' || formitem.type === 'headline' || formitem.type === 'horizontal-line'">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th colspan="1">
+                                <div class="inbox-header">
+                                  {{ formitem.name }}
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>
+                        </table>
+                      </div>
+
+                      <div class="form-group" *ngIf="formitem.type == 'hyperlink' && formitem.type !== headline-with-line">
+                        <div class="form-line ">
+                          <label class="" [ngClass]="formitem.required ? 'required' : ''">{{ formitem.name }}</label>
+                          <input type="url" name="{{formitem.id}}" class="form-control" value="{{formitem.value}}" id="{{formitem.id}}"
+                            [required]="formitem.required" [attr.readonly]="formitem.readOnly" ngModel>
+                        </div>
+                      </div>
+
+                      <div class="form-group" *ngIf="formitem.type == 'password' && formitem.type !== headline-with-line">
+                        <div class="form-line ">
+                          <label class="" [ngClass]="formitem.required ? 'required' : ''">{{ formitem.name }}</label>
+                          <input type="password" name="{{formitem.id}}" class="form-control" value="{{formitem.value}}" id="{{formitem.id}}"
+                            [required]="formitem.required" [attr.readonly]="formitem.readOnly" ngModel>
+                        </div>
+                      </div>
+
+                      
+
+                      <div class="form-group" *ngIf="formitem.type == 'text' && formitem.type !== headline-with-line">
+                          <div class="form-line ">
+                              <label class="" [ngClass]="formitem.required ? 'required' : ''">{{ formitem.name }}</label>
+                              <input type="{{formitem.type}}" name="{{formitem.id}}" class="form-control" value="{{formitem.value}}" id="{{formitem.id}}"  [required]="formitem.required" [attr.readonly]="formitem.readOnly" ngModel>
+                          </div>
+                      </div>
+
+                      <div class="form-group" *ngIf="formitem.type == 'email' && formitem.type !== headline-with-line">
+                        <div class="form-line ">
+                            <label class="" [ngClass]="formitem.required ? 'required' : ''">{{ formitem.name }}</label>
+                            <input type="{{formitem.type}}" name="{{formitem.id}}" class="form-control" value="{{formitem.value}}" id="{{formitem.id}}"  [required]="formitem.required" [attr.readonly]="formitem.readOnly" ngModel>
+                            <div class="help-info">E.g. xyz@xyz.com
+                            </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group" *ngIf="formitem.type == 'boolean' && formitem.type !== headline-with-line">
+                        <div class="form-line form-check">
+                            <label  class="form-check-label">
+                              <input type="checkbox" name="{{formitem.id}}" class="form-check-input" value="{{formitem.value}}" id="{{formitem.id}}"  [required]="formitem.required" [attr.readonly]="formitem.readOnly" ngModel> {{formitem.name}}
+                              <span class="form-check-sign"><span class="check"></span></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                      <div class="form-group" *ngIf="(formitem.type == 'integer' || formitem.type == 'number' || formitem.type == 'decimal') && formitem.type !== headline-with-line">
+                          <div class="form-line ">
+                            <label class="" [ngClass]="formitem.required ? 'required' : ''">{{ formitem.name }}</label>
+                            <input type="number" name="{{formitem.id}}" class="form-control" value="{{formitem.value}}" id="{{formitem.id}}" [required]="formitem.required" [attr.readonly]="formitem.readOnly" ngModel  [attr.maxlength]="formitem?.params?.maxLength"
+                            [attr.minlength]="formitem?.params?.minLength">
+                          </div>
+                      </div>
+
+                      <div class="form-group" *ngIf="formitem.type == 'date' && formitem.type !== headline-with-line">
+                          <div class="form-line">
+                            <label class="" [ngClass]="formitem.required ? 'required' : ''">{{ formitem.name }}</label>
+                            <div style="display: flex;">
+                              <input type="text" name="{{formitem.id}}" class="form-control pointerNone"  style="width: 93%;" value="{{formitem.value}}" id="{{formitem.id}}" [required]="formitem.required" [attr.readonly]="formitem.readOnly" [attr.disabled]="formitem.readOnly ? true : null" ngModel>
+                              <div class="idd" style="position: relative;">
+                                <input type="text" class="datepicker" name="{{formitem.id}}" id="change-{{formitem.id}}" style="width: 24px; color: transparent;position: relative;z-index: 9;cursor: pointer;border-bottom: 0px;">
+                                <i class="fa fa-calendar {{formitem.id}}" aria-hidden="true" 
+                                  style="position: absolute;top: 13px;left: 7px;z-index: 0;"
+                                ></i>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+
+                      <div class="form-group" *ngIf="formitem.type == 'multiline' && formitem.type !== headline-with-line">
+                          <div class="form-line ">
+                            <label class="" [ngClass]="formitem.required ? 'required' : ''">{{ formitem.name }}</label>
+                            <textarea type="text" name="{{formitem.id}}" class="form-control"  id="{{formitem.id}}" [required]="formitem.required" [attr.readonly]="formitem.readOnly" ngModel >{{ formitem.value }}</textarea>
+                            
+                          </div>
+                      </div>
+
+                      <div class="form-group" *ngIf="formitem.type == 'multi-line-text' && formitem.type !== 'headline-with-line'">
+                        <div class="form-line ">
+                          <label class="" [ngClass]="formitem.required ? 'required' : ''">{{ formitem.name }}</label>
+                          <textarea type="text" name="{{formitem.id}}" class="form-control"  id="{{formitem.id}}" [required]="formitem.required" [attr.readonly]="formitem.readOnly"  ngModel>{{ formitem.value }}</textarea>
+                        </div>
+                      </div>
+
+                      <!-- <div class="form-group" *ngIf="formitem.type == 'multi-line-text' && formitem.type !== headline-with-line && formitem.id === 'commentsexternalcustomer'">
+                        <div class="form-line ">
+                          <label class="" [ngClass]="formitem.required ? 'required' : ''">{{ formitem.name }}</label>
+                          <div *ngFor="let item of externalComments; index as i" style="margin-bottom: 10px; display: flex;justify-content: space-between;align-items: center;">
+                            <input type="text" name="commentsexternalcustomer_{{i}}" class="form-control" value="{{item.text}}" id="commentsexternalcustomer_{{i}}" style="width: 85%;"> 
+                            <i *ngIf="i == 0" class="material-icons" style="cursor: pointer;" (click)="commentAdd()">add</i>
+                            <i *ngIf="i > 0" class="material-icons" style="cursor: pointer;" (click)="commentRemove(i)">remove</i>
+                          </div>
+                          <textarea type="text" name="{{formitem.id}}" class="form-control"  id="{{formitem.id}}" [required]="formitem.required" [attr.readonly]="formitem.readOnly" ngModel>{{ formitem.value }}</textarea>
+                        </div>
+                      </div> -->
+
+                      <div class="form-group" *ngIf="formitem.type == 'dropdown' && formitem.type !== headline-with-line">
+                          <div>
+                            <label>{{ formitem.name }}</label>
+                            <select class="browser-default" name="{{formitem.id}}" [required]="formitem.required" [attr.readonly]="formitem.readOnly" [attr.disabled]="formitem.readOnly ? true : null" ngModel>
+                              <option value="{{option.name}}" selected="{{option.name == formitem.value}}" *ngFor="let option of formitem.options">{{option.name}}</option>
+                            </select>
+                          </div>
+                      </div>
+
+                      <div class="form-group" *ngIf="formitem.type == 'radio-buttons' && formitem.type !== 'headline-with-line'">
+                          <div >
+                            <label>{{ formitem.name }}</label>
+                            <div class="form-check form-check-radio" *ngFor="let option of formitem.options">
+                              <label>
+                                <input type="radio" name="{{formitem.id}}" value="{{option.name}}" id="{{formitem.id}}-{{option.name}}" [required]="formitem.required" [checked]="formitem.value == option.name" ngModel><span> {{option.name}}</span>
+                              </label>
+                            </div>
+                          </div>
+                      </div>
+
+                      <div class="form-group" *ngIf="(formitem.type == 'pdf-viewer' || formitem.type == 'upload')&& formitem.type !== 'headline-with-line'">
+                          <div >
+                            <label>{{ formitem.name }}</label>
+                            <div class="file-field input-field" style="margin: 0;">
+                              <div class="btn">
+                                <span>File</span><input type="file" name="fileUpload" ng2FileSelect [uploader]="uploader" (change)="onFileSelected($event)">
+                              </div>
+                              <div class="file-path-wrapper">
+                                <input class="file-path validate valid" type="text"></div>
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                  
+
+                    <div class="files" style="width: 100%">
+                      <div class="row col-md-12" style="margin-right: 0px;margin-left: 5px;">
+                        <div class="col-md-12 m-b-10 row-border" *ngFor="let item of contentData?.data">
+                          <div class="file-name">
+                            <i class="fas fa-file-{{item.simpleType}}"></i>
+                            <div>{{item.name}}</div>
+                          </div>
+                          <div class="file-date">
+                            Added By {{item.created | timeAgo}}
+                          </div>
+                          <div class="action-buttons">
+                            <a class="download m-r-10" target="_blank" download="{{item.name}}" href="{{urldownload}}DB-task/app/rest/content/{{item.id}}/raw" (click)="$event.stopPropagation();"><i class="fas fa-file-download"></i></a>
+                            <a class="clear" (click)="deleteContent(item.id)"><i class="fas fa-trash-alt"></i></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- <div class="col-md-12 text-right" >
+                      <button type="button" class="btn btn-warning waves-effect" (click)="showLineItem()" style="display: inline-flex;align-items: center;"><i class="far fa-eye" style="font-size: 17px;margin-right: 10px;"></i> Line Item </button>
+                    </div> -->
+
+                  </div>
+                  
+                  <div class="action-button">
+                    <div class="showLineItem" *ngIf="pdfUrl != undefined">
+                      <button type="button" class="btn btn-warning waves-effect" (click)="showLineItem()" style="display: inline-flex;align-items: center;"><i class="far fa-eye" style="font-size: 17px;margin-right: 10px;"></i> Line Item </button>
+                    </div>
+                    <div class="m-l-0 m-b-20"  *ngIf="checkcondition(taskDetails?.endDate, taskDetails?.assignee?.id)">
+                      <button type="submit"
+                      class="btn btn-info m-r-10 waves-effect" [disabled]="singleTask.invalid" >Save</button>
+                      
+                      <button type="button"
+                      class="btn btn-danger waves-effect" [disabled]="completeLoader" *ngIf="taskDetails?.formKey == 'frmValidate'" (click)="completeTask('validation', singleTask)">Complete <div *ngIf="completeLoader" class="spinner-border" role="status"></div>
+                      </button>
+                      <button type="button"
+                      class="btn btn-danger waves-effect" [disabled]="completeLoader" *ngIf="taskDetails?.formKey == 'frm_matching_process'" (click)="completeTask('Match', singleTask)">Match <div *ngIf="completeLoader" class="spinner-border" role="status"></div></button>
+                      <button type="button"
+                      class="btn btn-danger waves-effect" [disabled]="completeLoader" *ngIf="taskDetails?.formKey == 'frmDuplicateCheck'" (click)="completeTask('duplicate', singleTask)">Check Duplicate <div *ngIf="completeLoader" class="spinner-border" role="status"></div></button>
+                      <button type="button"
+                      class="btn btn-danger  waves-effect" [disabled]="completeLoader" *ngIf="taskDetails?.formKey !== 'frmDuplicateCheck' && taskDetails?.formKey !== 'frm_matching_process' && taskDetails?.formKey !== 'frmValidate' && taskDetails?.formKey === 'frmAP_new'" (click)="completeTask('complete', singleTask)">Complete 
+                      <div *ngIf="completeLoader" class="spinner-border" role="status"></div>
+                      </button>
+                      <button type="button"
+                      class="btn btn-danger waves-effect" [disabled]="completeLoader" *ngIf="taskDetails?.formKey !== 'frmDuplicateCheck' && taskDetails?.formKey !== 'frm_matching_process' && taskDetails?.formKey !== 'frmValidate' && taskDetails?.formKey !== 'frmAP_new'" (click)="completeTask('default', singleTask)">Complete 
+                      <div *ngIf="completeLoader" class="spinner-border" role="status"></div>
+                    </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 padding-left-0" *ngIf="pdfUrl != undefined" >
+      <div class="card">
+        <div class="body" [ngClass]="{'pb-0': isShowLineItem }">
+
+          <div id="aniimated-thumbnials" class="list-unstyled row clearfix text-center">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 display-flex" style="margin-bottom: 0px">
+              <div class="col-lg-6 display-flex mb-0">
+                <span>Zoom In/Out</span> <span style="display: flex;align-items: center;margin-left: 10px;" (click)="changeZoomIn()"><i class="material-icons" style="cursor: pointer;">zoom_in</i></span> <span style="display: flex;align-items: center;margin-left: 10px" (click)="changeZoomOut()"><i class="material-icons" style="cursor: pointer;">zoom_out</i></span> 
+                <!-- <input type="number" placeholder="zoom" value="1" (input)="changeZoomInOut($event)"> -->
+              </div>
+              <div class="col-lg-6  display-flex mb-0">
+                <span>Enter Page </span> <input type="number" placeholder="Page Number" class="mb-0" value="1" (input)="changeInputPage($event)">
+                <a href="javascript:void(0)" style="position: absolute;right: 20px;" (click)="rotated()"><i class="material-icons">rotate_90_degrees_ccw</i></a>
+              </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px; margin-bottom: 0px;" id="pdfContainer" (window:resize)="onResize($event)">
+              <div id="pdf-canvass" class="pdf-canvass" [ngClass]="{'minPdfCanvass': isShowLineItem }" >
+                <div *ngIf="pdfLoader" class="loader-div pdf-loader" style="left: 0px; flex-direction: column;">
+                    <div class="preloader">
+                      <div class="spinner-layer pl-red">
+                        <div class="circle-clipper left">
+                          <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                          <div class="circle"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div style="margin-top: 10px;">Uploading in progress.....</div>
+                </div>
+                <div style="width: 816px;height: 1056px;position: absolute;">
+                  <div *ngFor="let element of rubberBinding; index as i" 
+                  id="{{element.id}}"  
+                  class="rubberbiding-rect"
+                  (click)="rubberbindingElement(element.id, element.text)"
+                  [ngStyle]="{'left': element?.geometry?.boundingBox?.left+'px', 'top': element?.geometry?.boundingBox?.top+'px', 'width': element?.geometry?.boundingBox?.width+'px', 'height': element?.geometry?.boundingBox?.height+'px', 'z-index': '99'}"></div>
+                </div>
+                <pdf-viewer [src]="pdfUrl" 
+                            [render-text]="false"
+                            [fit-to-page]="true"
+                            [show-all]="false"
+                            [zoom]="zoompage"
+                            [(page)]="pdfpage"
+                            [autoresize]="false"
+                            [rotation]= "rotateImage"
+                            style="display: block;"
+                >
+              </pdf-viewer>
+              </div>
+              <div *ngIf="!pdfUrl"> PDF not available </div>
+
+              <!-- <a href="assets/images/image-gallery/1.jpg" data-sub-html="Demo Description">
+                <img class="img-responsive thumbnail"
+                src="assets/images/image-gallery/thumb/thumb-1.jpg" alt="">
+              </a> -->
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 main-line-item" *ngIf="isShowLineItem">
+              <div class="table-responsive">
+                <div class="text-left addLineItem"><a href="javascript:void(0)" (click)="addLineItem()"> + Add Line Item</a> <div style="line-height: 41px;"><a class="closeLineItem" href="javascript:void(0)" (click)="closeLineItem()">Close</a> <a class="closeLineItem" href="javascript:void(0)" (click)="deleteLineItem()">Delete</a> </div></div>
+                <form id="lineItems">
+                  <table id="taskData"
+                    class="display table table-hover table-checkable order-column width-per-100">
+                    <!-- <thead>
+                      <tr>
+                        <th>Qty</th>
+                        <th>Item Numbers.</th>
+                        <th>Vendor Name</th>
+                        <th>Invoice Date</th>
+                        <th>Task date</th>
+                      </tr>
+                    </thead> -->
+                    <tbody id="lineItemsBody" style="display: block;overflow: scroll;max-height: 230px;padding-top: 53px;">
+                      <tr *ngFor="let item of lineItems; let i = index"  class="selectItem" [ngClass]="{'active': selectedItem.indexOf(i) >= 0 }" style="cursor: pointer;">
+                        <td width="5%"><i class="far fa-square" *ngIf="selectedItem.indexOf(i) < 0 && i > 0" (click)="selectItem(i)"></i> <i class="fas fa-check-square" *ngIf="selectedItem.indexOf(i) >= 0 && i > 0" (click)="UnSelectItem(i)"></i>  </td>
+                        <td width="20%" *ngFor="let dd of item" style="padding: 2px">
+                          <input *ngIf="i > 0" type="text" name="{{i+1}}" value="{{dd}}" style="font-size: 13px;" />
+                          <div *ngIf="i == 0" style="padding: 14px;">{{dd}}</div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    
+    <app-taskdetails *ngIf="isDetailsShow && !taskDetails?.parentTaskId" [subTaskLists]="subTasklists" [commentDetails]="commentDetails" [taskId]="taskDetails?.id" [processInstanceId]="taskDetails?.processInstanceId" [involvePeopleList]="involvePeopleList" [contentData]="contentData" (refreshTask)="fetchSingleTask()" (contentRefresh)="fetchContent()" (refreshSubTask)="fetchSubTask()" (deleteContent)="deleteContent($event)"  (refreshComments)="fetchLatestComment()"></app-taskdetails>
+  </div>
+</section>
+
+<div class="modal fade" id="select_person" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="col-lg-12">
+            <div class="form-group">
+              <div class="form-line">
+                <div class="ng-autocomplete">
+                  <ng-autocomplete [data]="usersData" [searchKeyword]="keyword" (selected)='selectEvent($event)' placeHolder="Search User"
+                    (inputChanged)='onChangeSearch($event)' (inputCleared)="clearInput($event)"
+                    [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                  </ng-autocomplete>
+
+                  <ng-template #itemTemplate let-item>
+                    <div class="auto-complete-item"><i class="far fa-user"></i> <a [innerHTML]="item.fullName"></a></div>
+                  </ng-template>
+
+                  <ng-template #notFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                  </ng-template>
+                </div>
+              </div>
+
+
+
+            </div>
+            <label>Use ↑ and ↓ to select and press Enter to confirm</label>
+            <h4>Matching people</h4>
+            <label>Use the search box above to find users</label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger waves-effect cancel hide" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

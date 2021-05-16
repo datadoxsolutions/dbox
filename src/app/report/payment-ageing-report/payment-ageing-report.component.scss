@@ -1,0 +1,13 @@
+.dataTables_wrapper .dt-buttons {
+  margin-bottom: 30px !important;
+}
+
+.task-bcrumb {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  .fa-tachometer-alt {
+    font-size: 18px;
+  }
+}

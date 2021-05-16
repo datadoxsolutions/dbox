@@ -1,0 +1,30 @@
+<section class="content defination-section">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <!-- <li class="breadcrumb-item">
+                            <h4 class="page-title">Dashboard</h4>
+                        </li> -->
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/dashboard/main">
+                                <i class="fas fa-home"></i> Home</a>
+                        </li>
+                        <li class=" active"> Select Module</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Widgets -->
+        <div class="row">
+          <div class="col-lg-3 col-sm-6" *ngFor="let item of listOfApps">
+              <div class="support-box text-center {{item.color}} align-center-flex" (click)="selectApp(item)">
+                <h1 class="m-b-0 align-center-flex"><i class="material-icons m-r-10">{{item.icon}}</i> 
+                  {{(item?.name || item?.appDefinitionKey || item?.defaultAppId) | titlecase}} </h1>
+                  <!-- <p>{{item?.description}}</p> -->
+              </div>
+          </div>
+      </div>
+    </div>
+</section>
