@@ -72,7 +72,7 @@
               </div>
           </div>
           <div class="col-lg-2">
-            <button class="btn btn-primary pull-right m-r-10 waves-effect" type="button" data-toggle="modal" data-target=".compareduplicate" style="font-size: 12px">Compare Duplicate</button>
+            <button class="btn btn-primary pull-right m-r-10 waves-effect" type="button" data-toggle="modal" data-target=".compareduplicate" (click)="openCompare()" style="font-size: 12px">Compare Duplicate</button>
           </div>
           <div class="modal fade bd-diagram-example-modal-lg" tabindex="-1" role="dialog"
                                     aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -113,7 +113,7 @@
                                 Invoice NO
                               </div> 
                               <div class="col-md-6">
-                                12345
+                                {{oldpreviewData.invoicenumber || '-N/A-'}}
                               </div> 
                             </div>
                             <div class="row">
@@ -121,7 +121,7 @@
                                 Amount
                               </div> 
                               <div class="col-md-6">
-                                32.4
+                                {{oldpreviewData.invoiceamount || '-N/A-'}}
                               </div> 
                             </div>
                             <div class="row">
@@ -129,7 +129,7 @@
                                 PO. NO.
                               </div> 
                               <div class="col-md-6 text-red">
-                                324
+                                {{oldpreviewData.ponumber || '-N/A-'}}
                               </div> 
                             </div>
                             <div class="row">

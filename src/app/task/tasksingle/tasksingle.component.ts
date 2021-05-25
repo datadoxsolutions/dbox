@@ -131,6 +131,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
     canvas = null;
     rubberBinding = [];
     externalComments = [{text: null}];
+    oldpreviewData = {};
   // tslint:disable-next-line:max-line-length
   constructor(private dynamicScriptLoader: DynamicScriptLoaderService, public sanitizer: DomSanitizer, public router: Router,  private route: ActivatedRoute, private DBXHttp: DBXHttpService, private http: Http, private notify: NotificationService, private elementRef: ElementRef, private navService: NavService) {
     this.urldownload = environment.api_endpoint;
@@ -393,6 +394,23 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
       }
       this.completeLoader = false;
     });
+  }
+
+  openCompare() {
+    let obj = _.findWhere(this.processingForm.fields, {id: "workunitid"});
+    obj.value = "wu-05/14/2021-4568";
+    this.DBXHttp.get('jsflab/rest/DBDuplicateCheck/getDuplicateItemDetails/?workunitid=' + obj.value).subscribe((res: any) => {
+      console.log(res);
+      this.subTasklists = res;
+    });
+    console.log(this.processingForm.fields);
+    let arrayObj = ['invoicenumber', "invoiceamount", "ponumber"];
+    this.processingForm.fields.forEach(element => {
+      if(arrayObj.indexOf(element.id) >= 0) {
+        this.oldpreviewData[element.id] = element.value;
+      }
+    });
+    
   }
 
   duplicatePost(form: any) {
