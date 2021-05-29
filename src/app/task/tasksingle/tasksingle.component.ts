@@ -131,7 +131,8 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
     canvas = null;
     rubberBinding = [];
     externalComments = [{text: null}];
-    oldpreviewData = {};
+    oldpreviewData = [];
+    newpreviewData = [];
   // tslint:disable-next-line:max-line-length
   constructor(private dynamicScriptLoader: DynamicScriptLoaderService, public sanitizer: DomSanitizer, public router: Router,  private route: ActivatedRoute, private DBXHttp: DBXHttpService, private http: Http, private notify: NotificationService, private elementRef: ElementRef, private navService: NavService) {
     this.urldownload = environment.api_endpoint;
@@ -398,18 +399,36 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
 
   openCompare() {
     let obj = _.findWhere(this.processingForm.fields, {id: "workunitid"});
-    obj.value = "wu-05/14/2021-4568";
+    this.oldpreviewData = [];
+    this.newpreviewData = [];
     this.DBXHttp.get('jsflab/rest/DBDuplicateCheck/getDuplicateItemDetails/?workunitid=' + obj.value).subscribe((res: any) => {
-      console.log(res);
-      this.subTasklists = res;
+      console.log(res.existingData);
+      let dataValue  = res.existingData.split(',');
+      dataValue.forEach(element => {
+        console.log(element);
+        let obj = element.split('-');
+        this.oldpreviewData.push({
+          key: obj[0],
+          value: obj[1]
+        });
+      });
+
+      let arrayObj = this.oldpreviewData.map((ele) => {
+        return ele.key;
+      });
+      this.processingForm.fields.forEach(element => {
+        if(arrayObj.indexOf(element.id) >= 0) {
+          this.newpreviewData.push({
+            key: element.id,
+            value: element.value
+          });
+        }
+      });
+
+      //this.subTasklists = res;
     });
-    console.log(this.processingForm.fields);
-    let arrayObj = ['invoicenumber', "invoiceamount", "ponumber"];
-    this.processingForm.fields.forEach(element => {
-      if(arrayObj.indexOf(element.id) >= 0) {
-        this.oldpreviewData[element.id] = element.value;
-      }
-    });
+   
+    
     
   }
 

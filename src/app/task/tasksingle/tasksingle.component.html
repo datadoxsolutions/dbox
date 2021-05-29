@@ -108,72 +108,25 @@
                         <div class="row">
                           <div class="col-md-6 table-view">
                             <h5 class="color:#444; font-size: 600">Old Preview Data</h5>
-                            <div class="row">
+                            <div class="row" *ngFor="let item of oldpreviewData">
                               <div class="col-md-6">
-                                Invoice NO
+                                {{item.key}}
                               </div> 
                               <div class="col-md-6">
-                                {{oldpreviewData.invoicenumber || '-N/A-'}}
+                                {{item.value || '-N/A-'}}
                               </div> 
                             </div>
-                            <div class="row">
-                              <div class="col-md-6">
-                                Amount
-                              </div> 
-                              <div class="col-md-6">
-                                {{oldpreviewData.invoiceamount || '-N/A-'}}
-                              </div> 
-                            </div>
-                            <div class="row">
-                              <div class="col-md-6">
-                                PO. NO.
-                              </div> 
-                              <div class="col-md-6 text-red">
-                                {{oldpreviewData.ponumber || '-N/A-'}}
-                              </div> 
-                            </div>
-                            <div class="row">
-                              <div class="col-md-6">
-                                Image
-                              </div> 
-                              <div class="col-md-6">
-                                -N/A-
-                              </div> 
-                            </div>
+                           
                           </div>
                           <div class="col-md-6 table-view bg-sec-grey">
                             <h5 class="color:#444; font-size: 600">New Preview Data</h5>
-                            <div class="row">
+                            <div class="row" *ngFor="let item of newpreviewData">
                               <div class="col-md-6">
-                                Invoice NO
-                              </div> 
-                              <div class="col-md-6 text-red">
-                                12345
-                              </div> 
-                            </div>
-                            <div class="row ">
-                              <div class="col-md-6">
-                                Amount
+                                {{item.key}}
                               </div> 
                               <div class="col-md-6">
-                                32.4
-                              </div> 
-                            </div>
-                            <div class="row">
-                              <div class="col-md-6">
-                                PO. NO.
-                              </div> 
-                              <div class="col-md-6 text-red">
-                                324
-                              </div> 
-                            </div>
-                            <div class="row">
-                              <div class="col-md-6">
-                                Image
-                              </div> 
-                              <div class="col-md-6">
-                                -N/A-
-                              </div> 
+                                {{item.value || '-N/A-'}}
+                              </div>
                             </div>
                           </div>
                         </div>
