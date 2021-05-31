@@ -397,10 +397,10 @@
                 </div>
                 <div style="width: 816px;height: 1056px;position: absolute;">
                   <div *ngFor="let element of rubberBinding; index as i" 
-                  id="{{element.id}}"  
+                  id="box_{{i}}"  
                   class="rubberbiding-rect"
-                  (click)="rubberbindingElement(element.id, element.text)"
-                  [ngStyle]="{'left': element?.geometry?.boundingBox?.left+'px', 'top': element?.geometry?.boundingBox?.top+'px', 'width': element?.geometry?.boundingBox?.width+'px', 'height': element?.geometry?.boundingBox?.height+'px', 'z-index': '99'}"></div>
+                  (click)="rubberbindingElement('box_'+i, element.Value)"
+                  [ngStyle]="{'left': element?.BoundingBox?.left+'px', 'top': element?.BoundingBox?.top+'px', 'width': element?.BoundingBox?.width+'px', 'height': element?.BoundingBox?.height+'px', 'z-index': '99'}"></div>
                 </div>
                 <pdf-viewer [src]="pdfUrl" 
                             [render-text]="false"
