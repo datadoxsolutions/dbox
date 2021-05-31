@@ -72,7 +72,7 @@
               </div>
           </div>
           <div class="col-lg-2">
-            <button class="btn btn-primary pull-right m-r-10 waves-effect" type="button" data-toggle="modal" data-target=".compareduplicate" (click)="openCompare()" style="font-size: 12px">Compare Duplicate</button>
+            <button class="btn btn-primary pull-right m-r-10 waves-effect" *ngIf="accountId == 'Potential Duplicate'" type="button" data-toggle="modal" data-target=".compareduplicate" (click)="openCompare()" style="font-size: 12px">Compare Duplicate</button>
           </div>
           <div class="modal fade bd-diagram-example-modal-lg" tabindex="-1" role="dialog"
                                     aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -235,7 +235,8 @@
                           <div class="form-line">
                             <label class="" [ngClass]="formitem.required ? 'required' : ''">{{ formitem.name }}</label>
                             <div style="display: flex;">
-                              <input type="text" name="{{formitem.id}}" class="form-control pointerNone"  style="width: 93%;" value="{{formitem.value}}" id="{{formitem.id}}" [required]="formitem.required" [attr.readonly]="formitem.readOnly" [attr.disabled]="formitem.readOnly ? true : null" ngModel>
+                              <input type="text" name="{{formitem.id}}" class="form-control "  style="width: 93%;" value="{{formitem.value}}" id="{{formitem.id}}" [required]="formitem.required" [attr.readonly]="formitem.readOnly" [attr.disabled]="formitem.readOnly ? true : null" ngModel>
+                              <!-- pointerNone -->
                               <div class="idd" style="position: relative;">
                                 <input type="text" class="datepicker" name="{{formitem.id}}" id="change-{{formitem.id}}" style="width: 24px; color: transparent;position: relative;z-index: 9;cursor: pointer;border-bottom: 0px;">
                                 <i class="fa fa-calendar {{formitem.id}}" aria-hidden="true" 
