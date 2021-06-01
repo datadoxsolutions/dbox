@@ -16,6 +16,7 @@ import { FileUploader, FileItem } from 'ng2-file-upload';
 import { NotificationService } from '../../core/services/notification.service';
 import * as Tesseract from 'tesseract.js';
 import { NavService } from 'src/app/core/services/nav.service';
+import { element } from '@angular/core/src/render3';
 declare const swal: any;
 
 
@@ -414,8 +415,6 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
       this.newWorkunitId = res.duplicateWorkunitId;
       this.oldWorkunitId = res.workunitId;
       this.oldPdfViewer = res.fileId ? this.urldownload + 'DB-task/app/rest/content/' + res.fileId + '/raw' : null;
-      this.newPdfViewer = res.fileId ? this.urldownload + 'DB-task/app/rest/content/' + res.fileId + '/raw' : null;
-      console.log("this.oldPdfViewer", this.oldPdfViewer);
       dataValue.forEach(element => {
         console.log(element);
         let obj = element.split('-');
@@ -428,14 +427,23 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
       let arrayObj = this.oldpreviewData.map((ele) => {
         return ele.key;
       });
-      this.processingForm.fields.forEach(element => {
-        if(arrayObj.indexOf(element.id) >= 0) {
-          this.newpreviewData.push({
-            key: element.id,
-            value: element.value
-          });
-        }
+      
+      arrayObj.forEach((element) => {
+        let obj = _.findWhere(this.processingForm.fields, {id: element});
+        this.newpreviewData.push({
+          key: obj.id,
+          value: obj.value
+        });
       });
+
+      // this.processingForm.fields.forEach(element => {
+      //   if(arrayObj.indexOf(element.id) >= 0) {
+      //     this.newpreviewData.push({
+      //       key: element.id,
+      //       value: element.value
+      //     });
+      //   }
+      // });
 
       //this.subTasklists = res;
     });
@@ -615,7 +623,10 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
             document.getElementById('invoiceamount').setAttribute('readonly', 'readonly');
             invoiceamount = $('#invoiceamount').val();
           } else {
+            console.log(that.ssingleTask);
             $('#invoiceamount').val(invoiceamount);
+            that.ssingleTask.form.patchValue({invoiceamount: invoiceamount});
+
           }
         });
       }
@@ -1103,7 +1114,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
     const ctx = this.canvas.getContext('2d');
     ctx.beginPath();
     const inputOffset = $('input.'+inputSelector).offset();
-    if(inputOffset.top && document.getElementById(rectangleBox)) {
+    if(inputOffset && inputOffset.top && document.getElementById(rectangleBox)) {
       const leftside = document.getElementById('form_advanced_validation').clientWidth - 3;
       console.log(inputOffset);
       // Start and end points
