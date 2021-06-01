@@ -133,6 +133,10 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
     externalComments = [{text: null}];
     oldpreviewData = [];
     newpreviewData = [];
+    oldPdfViewer = null;
+    oldWorkunitId = "";
+    newWorkunitId = "";
+    newPdfViewer = null;
   // tslint:disable-next-line:max-line-length
   constructor(private dynamicScriptLoader: DynamicScriptLoaderService, public sanitizer: DomSanitizer, public router: Router,  private route: ActivatedRoute, private DBXHttp: DBXHttpService, private http: Http, private notify: NotificationService, private elementRef: ElementRef, private navService: NavService) {
     this.urldownload = environment.api_endpoint;
@@ -404,6 +408,14 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
     this.DBXHttp.get('jsflab/rest/DBDuplicateCheck/getDuplicateItemDetails/?workunitid=' + obj.value).subscribe((res: any) => {
       console.log(res.existingData);
       let dataValue  = res.existingData.split(',');
+      dataValue = dataValue.filter((ele) => {
+        return ele != '';
+      })
+      this.newWorkunitId = res.duplicateWorkunitId;
+      this.oldWorkunitId = res.workunitId;
+      this.oldPdfViewer = res.fileId ? this.urldownload + 'DB-task/app/rest/content/' + res.fileId + '/raw' : null;
+      this.newPdfViewer = res.fileId ? this.urldownload + 'DB-task/app/rest/content/' + res.fileId + '/raw' : null;
+      console.log("this.oldPdfViewer", this.oldPdfViewer);
       dataValue.forEach(element => {
         console.log(element);
         let obj = element.split('-');

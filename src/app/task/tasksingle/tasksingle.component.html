@@ -95,7 +95,7 @@
 
           <div class="modal fade compareduplicate" tabindex="-1" role="dialog"
                                     aria-labelledby="myLargeModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg">
+              <div class="modal-dialog modal-lg" style="max-width: 1280px !important;">
                   <div class="modal-content">
                       <div class="modal-header" style="border-bottom: 1px solid #ddd">
                           <h5 class="modal-title" id="comare-title">Compare Duplicate</h5>
@@ -107,7 +107,7 @@
                       <div class="modal-body img-popup">
                         <div class="row">
                           <div class="col-md-6 table-view">
-                            <h5 class="color:#444; font-size: 600">Old Preview Data</h5>
+                            <h5 class="color:#444; font-size: 600">Old Preview Data - {{oldWorkunitId}}</h5>
                             <div class="row" *ngFor="let item of oldpreviewData">
                               <div class="col-md-6">
                                 {{item.key}}
@@ -116,10 +116,23 @@
                                 {{item.value || '-N/A-'}}
                               </div> 
                             </div>
+                            <div *ngIf="oldPdfViewer">
+                                <pdf-viewer [src]="oldPdfViewer" 
+                                            [render-text]="false"
+                                            [fit-to-page]="true"
+                                            [show-all]="false"
+                                            [zoom]="zoompage"
+                                            [(page)]="pdfpage"
+                                            [autoresize]="false"
+                                            [rotation]= "rotateImage"
+                                            style="display: block;"
+                                >
+                              </pdf-viewer>
+                            </div>
                            
                           </div>
                           <div class="col-md-6 table-view bg-sec-grey">
-                            <h5 class="color:#444; font-size: 600">New Preview Data</h5>
+                            <h5 class="color:#444; font-size: 600">New Preview Data - {{oldWorkunitId}}</h5>
                             <div class="row" *ngFor="let item of newpreviewData">
                               <div class="col-md-6">
                                 {{item.key}}
@@ -128,6 +141,19 @@
                                 {{item.value || '-N/A-'}}
                               </div>
                             </div>
+                            <div *ngIf="pdfUrl">
+                              <pdf-viewer [src]="pdfUrl" 
+                                          [render-text]="false"
+                                          [fit-to-page]="true"
+                                          [show-all]="false"
+                                          [zoom]="zoompage"
+                                          [(page)]="pdfpage"
+                                          [autoresize]="false"
+                                          [rotation]= "rotateImage"
+                                          style="display: block;"
+                              >
+                            </pdf-viewer>
+                          </div>
                           </div>
                         </div>
                       </div>
