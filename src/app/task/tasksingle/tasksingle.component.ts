@@ -539,7 +539,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
     // tslint:disable-next-line:max-line-length
     this.DBXHttp.get('ap-services-lineitem/apservice/processInstanceId/' + this.taskDetails.processInstanceId).subscribe((res: any) => {
       console.log("teststt", res);
-      this.singleTaskLineItem = res.TableData;
+      this.singleTaskLineItem = res.TableData ? res.Table.Data : [];
       this.bindingData = res.FormData;
       this.rubberBinding = res.WordData;
       this.generateData();
@@ -753,8 +753,9 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
         
         let inputId = $(this).attr('id').replace(/\s/g, '');
         let obj = _.findWhere(thast.processingForm.fields, {id: inputId});
-        let inputName = obj.name.replace(/\s/g, '');
+        let inputName = $(this).attr('id');
         let ObjectData = thast.bindingData[inputName];
+        console.log("ObjectData", ObjectData);
         let colorCode = "#d93025";
         $(this).css("border", "1px solid #b8b8b8");
         if(ObjectData) {
@@ -764,19 +765,19 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
             colorCode = "#FFBF00";
           }
 
-          console.log(ObjectData.boundingBox, inputName);
+          console.log(ObjectData.BoundingBox, inputName);
           let currentRatioWidth = 816;
           let currentRatioHeight = 1056;
-          console.log(obj, thast.processingForm.fields, inputName, ObjectData, currentRatioHeight, currentRatioWidth, (ObjectData.boundingBox.Left * currentRatioWidth));
+          console.log(obj, thast.processingForm.fields, inputName, ObjectData, currentRatioHeight, currentRatioWidth, (ObjectData.BoundingBox.Left * currentRatioWidth));
           $('#rectangleBox').remove();
-          $('#page1').after('<div id=\'rectangleBox\' class=\'rectangleBox\' style="left: ' + (ObjectData.boundingBox.left * currentRatioWidth) + 'px; top: ' + (ObjectData.boundingBox.top * currentRatioHeight) + 'px; width: ' + (ObjectData.boundingBox.width * currentRatioWidth) + 'px; height: ' + (ObjectData.boundingBox.height * currentRatioHeight) + 'px; "></div>');
+          $('#page1').after('<div id=\'rectangleBox\' class=\'rectangleBox\' style="left: ' + (ObjectData.BoundingBox.Left * currentRatioWidth) + 'px; top: ' + (ObjectData.BoundingBox.Top * currentRatioHeight) + 'px; width: ' + (ObjectData.BoundingBox.Width * currentRatioWidth) + 'px; height: ' + (ObjectData.BoundingBox.Height * currentRatioHeight) + 'px; "></div>');
           $(this).addClass('selectedInput');
           $('input').removeClass('selectedInput');
           $(this).addClass('selectedInput');
           $(this).css("border", "1px solid " + colorCode);
 
           //document.getElementById('pdf-canvass').scrollIntoView({ behavior: 'smooth'});
-          $('#pdf-canvass').animate({scrollTop: (ObjectData.boundingBox.top * currentRatioHeight)}, '150');
+          $('#pdf-canvass').animate({scrollTop: (ObjectData.BoundingBox.Top * currentRatioHeight)}, '150');
           //document.getElementById('pdf-canvass').scrollTop({behavior: 'smooth', top:  (ObjectData.boundingBox.Top / currentRatioHeight) });
           $('#lineDraw').remove();
           thast.generateLine();
@@ -1174,15 +1175,16 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
   generateRubberBinding() {
     var that = this;
     this.rubberBinding = this.rubberBinding.map((element, index) => {
-      if(element.geometry) {
-        element.geometry.boundingBox.width = element.geometry.boundingBox.width * 816;
-        element.geometry.boundingBox.height = element.geometry.boundingBox.height * 1056;
-        element.geometry.boundingBox.left = element.geometry.boundingBox.left * 816;
-        element.geometry.boundingBox.top = element.geometry.boundingBox.top * 1056 - $('#pdf-canvass').scrollTop();
+      if(element.BoundingBox) {
+        element.BoundingBox.width = element.BoundingBox.Width * 816;
+        element.BoundingBox.height = element.BoundingBox.Height * 1056;
+        element.BoundingBox.left = element.BoundingBox.Left * 816;
+        element.BoundingBox.top = element.BoundingBox.Top * 1056 - $('#pdf-canvass').scrollTop();
       }
       return element;
       //$('#page1').after('<div id="' + element.Id + '" onclick="rubberbindingElement(\''+element.Id+'\',\''+element.Text+'\')" class="rubberbiding-rect" style="left: ' + left + 'px; top: ' + top + 'px; width: ' + width + 'px; height: ' + height + 'px; "></div>');
     });
+    console.log("this.rubberBinding", this.rubberBinding);
   }
 
   commentAdd() {
