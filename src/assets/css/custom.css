@@ -32,6 +32,7 @@
 
 #leftsidebar {
   width: 218px;
+  background-color: #182d5f !important;
 }
 .sidebar .menu .list a span {
   font-size: 13px;
@@ -86,7 +87,7 @@ section.content {
 }
 
 #leftsidebar a.menuListIcon.active span {
-  color: #4598c9;
+  color: #e6ab4c;
   margin-left: 2px;
 }
 
@@ -95,7 +96,7 @@ section.content {
   position: none;
 }
 .login100-form {
-  background-color: rgba(245, 245, 245, 0.9);
+  background-color: #fff;
   width: 380px;
 	display: block;
   padding: 34px 15px;

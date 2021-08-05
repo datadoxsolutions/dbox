@@ -16,14 +16,17 @@
                 <a href="#" onClick="return false;" class="navbar-toggle collapsed" data-toggle="collapse"
                     data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="#" onClick="return false;" class="bars"></a>
-                <a class="navbar-brand" routerLink="dashboard/main">
-                    <img src="assets/images/db-logo.png" alt="" />
+                <a class="navbar-brand" routerLink="dashboard/main" style="
+                display: flex;
+                justify-content: center;
+            ">
+                    <img src="assets/images/db-logo.png" alt=""  style="width:60%"/>
                     <!-- <span class="logo-name">Lorax</span> -->
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="pull-left">
-                    <li style="width:71%" *ngIf="currentUrl ==='defination'">
+                    <li style="width:31%" *ngIf="currentUrl ==='defination'">
                         <img src="assets/images/db-logo.png" alt="" />
                     </li>
                     <li *ngIf="currentUrl !== 'defination'">
