@@ -1,9 +1,11 @@
 import { Component, HostListener } from '@angular/core';
 import { Event, Router, NavigationStart, NavigationEnd, RouterEvent } from '@angular/router';
 import { PlatformLocation } from '@angular/common';
+import { map, catchError } from 'rxjs/operators';
 import { DBXHttpService } from './core/dbx-http/dbx-http.service';
 import { AuthenticationService } from './core/auth/auth.service';
 import { Observable, zip, zip as observableZip } from 'rxjs';
+import { Http, Headers, Response } from '@angular/http';
 import { environment } from '../environments/environment';
 import { _ } from 'underscore';
 import { NavService } from './core/services/nav.service';
@@ -28,7 +30,7 @@ export class AppComponent {
   taskGetParamO: any = { state: 'open', assignment: 'involved', sort: 'created-desc' };
   // tslint:disable-next-line:variable-name
   // tslint:disable-next-line: max-line-length
-  constructor(private _router: Router, location: PlatformLocation, private DBXHttp: DBXHttpService, private auth: AuthenticationService, private navService: NavService) {
+  constructor(private http: Http, private _router: Router, location: PlatformLocation, private DBXHttp: DBXHttpService, private auth: AuthenticationService, private navService: NavService) {
     this.selectedTaskItem = this.auth.isTaskAppSelected();
     this.taskGetParamC.appDefinitionKey = this.selectedTaskItem.appDefinitionKey;
     this.taskGetParamO.appDefinitionKey = this.selectedTaskItem.appDefinitionKey;
@@ -131,7 +133,15 @@ export class AppComponent {
     openTask.forEach(element => {
       CounObj[element.name] = CounObj[element.name] ? CounObj[element.name] + 1 : 1;
     });
+
     this.listCountMenu = CounObj;
+    console.log(this.listCountMenu);
+    this.http.get('http://65.2.162.230:8088/dev/vendor/pending').pipe(
+      map((response: Response) => response.json())).subscribe((res: any) => {
+      this.listCountMenu['Supplier Details'] = res ? res.length : 0; 
+    });
+
+   
 
     localStorage.setItem('listofqueue', JSON.stringify(this.listOfQueue));
   }

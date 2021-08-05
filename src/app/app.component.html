@@ -243,7 +243,7 @@
                       <ul class="ml-menu" [ngStyle]="{'display': topManuActive ? 'block' : 'none' }">
                         <li *ngFor="let item of listOfQueue">
                           <a routerLink="task/{{item}}" [ngClass]="checkIndexOf(item) ? 'active' : 'no-active'"  class="menuListIcon" style="display: flex;flex-direction: row;align-items: center;">
-                            <i class="material-icons" style="top: 0;height: auto;">label_outline</i> <span style="margin-left: 3px">{{item}}</span>
+                            <i class="material-icons" style="top: 0;height: auto;">label_outline</i> <span style="margin-left: 3px; line-height: 20px;">{{item}}</span>
                             <span style="float: right;font-size: 12px;margin-right: 4px">({{listCountMenu[item] ? listCountMenu[item] : 0}})</span></a>
                         </li>
                       </ul>  

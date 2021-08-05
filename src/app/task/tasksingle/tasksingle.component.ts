@@ -2,10 +2,10 @@ import { Component, OnInit, ViewEncapsulation, ViewChild, EventEmitter, ElementR
 import { DynamicScriptLoaderService } from '../../dynamic-script-loader-service.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ConnectionBackend, XHRBackend, RequestOptions, Request, RequestOptionsArgs, Response, Http, Headers } from '@angular/http';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';import { ActivatedRoute } from '@angular/router';
 import { DBXHttpService } from '../../core/dbx-http/dbx-http.service';
 import * as moment from 'moment';
+import { map, catchError } from 'rxjs/operators';
 declare const $: any;
 declare const Dropzone: any;
 import data from './sample.json';
@@ -58,6 +58,7 @@ function readBase64(file): Promise<any> {
 })
 export class TasksingleComponent implements OnInit, AfterViewInit {
   subTasklists = [];
+  supplierDetails = [];
   isDetailsShow: any = false;
   singleTask: NgForm;
   bindingData = {};
@@ -159,6 +160,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
       this.taskGetParam = [this.taskId];
       this.fetchSingleTask();
       this.fetchSubTask();
+      this.getTaskList();
     });
     if (localStorage.getItem('listofqueue')) {
       this.listOfqueueData  = JSON.parse(localStorage.getItem('listofqueue'));
@@ -187,6 +189,36 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
   public fileOverAnother(e: any): void {
     this.hasAnotherDropZoneOver = e;
     this.uploader.uploadAll();
+  }
+
+  getTaskList() {
+    this.http.get('http://65.2.162.230:8088/dev/vendor/pending/request/'+this.taskGetParam).pipe(
+      map((response: Response) => response.json())).subscribe((res: any) => {
+     
+      this.supplierDetails = res;
+      this.supplierDetails = this.supplierDetails.map((ele) => {
+        ele.details = this.isJson(ele.newValue) ? JSON.parse(ele.newValue) : {};
+        return ele;
+      });
+      console.log(this.supplierDetails);
+    });
+  }
+  detailsValue(id, event) {
+    if(event.target.checked) {
+      this.supplierDetails.push(id);
+    }
+  }
+  approvalDetails() {
+    console.log(this.supplierDetails);
+  }
+
+  isJson(str) {
+      try {
+          JSON.parse(str);
+      } catch (e) {
+          return false;
+      }
+      return true;
   }
 
   fetchSingleTask() {

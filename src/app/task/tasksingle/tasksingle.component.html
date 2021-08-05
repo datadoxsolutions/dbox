@@ -24,7 +24,7 @@
                 </ul>
               </div>
               <ul>
-                <li *ngIf="!taskDetails?.assignee?.id"> <button type="button"
+                <li *ngIf="!taskDetails?.assignee?.id && supplierDetails.length == 0"> <button type="button"
                   class="btn btn-info m-r-10 waves-effect" (click)="submitClaim(taskDetails?.id)">Claim</button> </li>
                   <li *ngIf="taskDetails?.parentTaskId && taskDetails?.endDate == null"> <button type="button"
                     class="btn btn-info m-r-10 waves-effect" (click)="complete()">Complete</button> </li>
@@ -33,7 +33,7 @@
         </div>
       </div>
 
-    <div class="card margin-b-7">
+    <div class="card margin-b-7" *ngIf="supplierDetails.length == 0">
       <div class="boxs mail_listing" id="leftBoxData">
         <div class="row custom-indexer-info first-row">
           <div class="row-d" style="position: relative;">
@@ -164,8 +164,8 @@
         </div>
       </div>
     </div>
-
-    <div class="row" id="itemContainer" *ngIf="!taskDetails?.parentTaskId" [hidden]="isDetailsShow">
+    
+    <div class="row" id="itemContainer" *ngIf="!taskDetails?.parentTaskId && supplierDetails.length == 0" [hidden]="isDetailsShow">
       <div class="col-xs-12 col-sm-12" [ngClass]="(pdfUrl != undefined) ? 'col-md-4 col-lg-4' : 'col-md-8 col-lg-8'">
         <div class="card">
           <div class="boxs mail_listing">
@@ -390,98 +390,219 @@
           </div>
         </div>
       </div>
-    </div>
+      </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 padding-left-0" *ngIf="pdfUrl != undefined" >
-      <div class="card">
-        <div class="body" [ngClass]="{'pb-0': isShowLineItem }">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 padding-left-0" *ngIf="pdfUrl != undefined" >
+        <div class="card">
+          <div class="body" [ngClass]="{'pb-0': isShowLineItem }">
 
-          <div id="aniimated-thumbnials" class="list-unstyled row clearfix text-center">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 display-flex" style="margin-bottom: 0px">
-              <div class="col-lg-6 display-flex mb-0">
-                <span>Zoom In/Out</span> <span style="display: flex;align-items: center;margin-left: 10px;" (click)="changeZoomIn()"><i class="material-icons" style="cursor: pointer;">zoom_in</i></span> <span style="display: flex;align-items: center;margin-left: 10px" (click)="changeZoomOut()"><i class="material-icons" style="cursor: pointer;">zoom_out</i></span> 
-                <!-- <input type="number" placeholder="zoom" value="1" (input)="changeZoomInOut($event)"> -->
+            <div id="aniimated-thumbnials" class="list-unstyled row clearfix text-center">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 display-flex" style="margin-bottom: 0px">
+                <div class="col-lg-6 display-flex mb-0">
+                  <span>Zoom In/Out</span> <span style="display: flex;align-items: center;margin-left: 10px;" (click)="changeZoomIn()"><i class="material-icons" style="cursor: pointer;">zoom_in</i></span> <span style="display: flex;align-items: center;margin-left: 10px" (click)="changeZoomOut()"><i class="material-icons" style="cursor: pointer;">zoom_out</i></span> 
+                  <!-- <input type="number" placeholder="zoom" value="1" (input)="changeZoomInOut($event)"> -->
+                </div>
+                <div class="col-lg-6  display-flex mb-0">
+                  <span>Enter Page </span> <input type="number" placeholder="Page Number" class="mb-0" value="1" (input)="changeInputPage($event)">
+                  <a href="javascript:void(0)" style="position: absolute;right: 20px;" (click)="rotated()"><i class="material-icons">rotate_90_degrees_ccw</i></a>
+                </div>
               </div>
-              <div class="col-lg-6  display-flex mb-0">
-                <span>Enter Page </span> <input type="number" placeholder="Page Number" class="mb-0" value="1" (input)="changeInputPage($event)">
-                <a href="javascript:void(0)" style="position: absolute;right: 20px;" (click)="rotated()"><i class="material-icons">rotate_90_degrees_ccw</i></a>
-              </div>
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px; margin-bottom: 0px;" id="pdfContainer" (window:resize)="onResize($event)">
-              <div id="pdf-canvass" class="pdf-canvass" [ngClass]="{'minPdfCanvass': isShowLineItem }" >
-                <div *ngIf="pdfLoader" class="loader-div pdf-loader" style="left: 0px; flex-direction: column;">
-                    <div class="preloader">
-                      <div class="spinner-layer pl-red">
-                        <div class="circle-clipper left">
-                          <div class="circle"></div>
-                        </div>
-                        <div class="circle-clipper right">
-                          <div class="circle"></div>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px; margin-bottom: 0px;" id="pdfContainer" (window:resize)="onResize($event)">
+                <div id="pdf-canvass" class="pdf-canvass" [ngClass]="{'minPdfCanvass': isShowLineItem }" >
+                  <div *ngIf="pdfLoader" class="loader-div pdf-loader" style="left: 0px; flex-direction: column;">
+                      <div class="preloader">
+                        <div class="spinner-layer pl-red">
+                          <div class="circle-clipper left">
+                            <div class="circle"></div>
+                          </div>
+                          <div class="circle-clipper right">
+                            <div class="circle"></div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div style="margin-top: 10px;">Uploading in progress.....</div>
+                      <div style="margin-top: 10px;">Uploading in progress.....</div>
+                  </div>
+                  <div style="width: 816px;height: 1056px;position: absolute;">
+                    <div *ngFor="let element of rubberBinding; index as i" 
+                    id="box_{{i}}"  
+                    class="rubberbiding-rect"
+                    (click)="rubberbindingElement('box_'+i, element.Value)"
+                    [ngStyle]="{'left': element?.BoundingBox?.left+'px', 'top': element?.BoundingBox?.top+'px', 'width': element?.BoundingBox?.width+'px', 'height': element?.BoundingBox?.height+'px', 'z-index': '99'}"></div>
+                  </div>
+                  <pdf-viewer [src]="pdfUrl" 
+                              [render-text]="false"
+                              [fit-to-page]="true"
+                              [show-all]="false"
+                              [zoom]="zoompage"
+                              [(page)]="pdfpage"
+                              [autoresize]="false"
+                              [rotation]= "rotateImage"
+                              style="display: block;"
+                  >
+                </pdf-viewer>
                 </div>
-                <div style="width: 816px;height: 1056px;position: absolute;">
-                  <div *ngFor="let element of rubberBinding; index as i" 
-                  id="box_{{i}}"  
-                  class="rubberbiding-rect"
-                  (click)="rubberbindingElement('box_'+i, element.Value)"
-                  [ngStyle]="{'left': element?.BoundingBox?.left+'px', 'top': element?.BoundingBox?.top+'px', 'width': element?.BoundingBox?.width+'px', 'height': element?.BoundingBox?.height+'px', 'z-index': '99'}"></div>
-                </div>
-                <pdf-viewer [src]="pdfUrl" 
-                            [render-text]="false"
-                            [fit-to-page]="true"
-                            [show-all]="false"
-                            [zoom]="zoompage"
-                            [(page)]="pdfpage"
-                            [autoresize]="false"
-                            [rotation]= "rotateImage"
-                            style="display: block;"
-                >
-              </pdf-viewer>
-              </div>
-              <div *ngIf="!pdfUrl"> PDF not available </div>
+                <div *ngIf="!pdfUrl"> PDF not available </div>
 
-              <!-- <a href="assets/images/image-gallery/1.jpg" data-sub-html="Demo Description">
-                <img class="img-responsive thumbnail"
-                src="assets/images/image-gallery/thumb/thumb-1.jpg" alt="">
-              </a> -->
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 main-line-item" *ngIf="isShowLineItem">
-              <div class="table-responsive">
-                <div class="text-left addLineItem"><a href="javascript:void(0)" (click)="addLineItem()"> + Add Line Item</a> <div style="line-height: 41px;"><a class="closeLineItem" href="javascript:void(0)" (click)="closeLineItem()">Close</a> <a class="closeLineItem" href="javascript:void(0)" (click)="deleteLineItem()">Delete</a> </div></div>
-                <form id="lineItems">
-                  <table id="taskData"
-                    class="display table table-hover table-checkable order-column width-per-100">
-                    <!-- <thead>
-                      <tr>
-                        <th>Qty</th>
-                        <th>Item Numbers.</th>
-                        <th>Vendor Name</th>
-                        <th>Invoice Date</th>
-                        <th>Task date</th>
-                      </tr>
-                    </thead> -->
-                    <tbody id="lineItemsBody" style="display: block;overflow: scroll;max-height: 230px;padding-top: 53px;">
-                      <tr *ngFor="let item of lineItems; let i = index"  class="selectItem" [ngClass]="{'active': selectedItem.indexOf(i) >= 0 }" style="cursor: pointer;">
-                        <td width="5%"><i class="far fa-square" *ngIf="selectedItem.indexOf(i) < 0 && i > 0" (click)="selectItem(i)"></i> <i class="fas fa-check-square" *ngIf="selectedItem.indexOf(i) >= 0 && i > 0" (click)="UnSelectItem(i)"></i>  </td>
-                        <td width="20%" *ngFor="let dd of item" style="padding: 2px">
-                          <input *ngIf="i > 0" type="text" name="{{i+1}}" value="{{dd}}" style="font-size: 13px;" />
-                          <div *ngIf="i == 0" style="padding: 14px;">{{dd}}</div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </form>
+                <!-- <a href="assets/images/image-gallery/1.jpg" data-sub-html="Demo Description">
+                  <img class="img-responsive thumbnail"
+                  src="assets/images/image-gallery/thumb/thumb-1.jpg" alt="">
+                </a> -->
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 main-line-item" *ngIf="isShowLineItem">
+                <div class="table-responsive">
+                  <div class="text-left addLineItem"><a href="javascript:void(0)" (click)="addLineItem()"> + Add Line Item</a> <div style="line-height: 41px;"><a class="closeLineItem" href="javascript:void(0)" (click)="closeLineItem()">Close</a> <a class="closeLineItem" href="javascript:void(0)" (click)="deleteLineItem()">Delete</a> </div></div>
+                  <form id="lineItems">
+                    <table id="taskData"
+                      class="display table table-hover table-checkable order-column width-per-100">
+                      <!-- <thead>
+                        <tr>
+                          <th>Qty</th>
+                          <th>Item Numbers.</th>
+                          <th>Vendor Name</th>
+                          <th>Invoice Date</th>
+                          <th>Task date</th>
+                        </tr>
+                      </thead> -->
+                      <tbody id="lineItemsBody" style="display: block;overflow: scroll;max-height: 230px;padding-top: 53px;">
+                        <tr *ngFor="let item of lineItems; let i = index"  class="selectItem" [ngClass]="{'active': selectedItem.indexOf(i) >= 0 }" style="cursor: pointer;">
+                          <td width="5%"><i class="far fa-square" *ngIf="selectedItem.indexOf(i) < 0 && i > 0" (click)="selectItem(i)"></i> <i class="fas fa-check-square" *ngIf="selectedItem.indexOf(i) >= 0 && i > 0" (click)="UnSelectItem(i)"></i>  </td>
+                          <td width="20%" *ngFor="let dd of item" style="padding: 2px">
+                            <input *ngIf="i > 0" type="text" name="{{i+1}}" value="{{dd}}" style="font-size: 13px;" />
+                            <div *ngIf="i == 0" style="padding: 14px;">{{dd}}</div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    </div>
     
+    <div class="col-xs-12 col-sm-12" *ngIf="supplierDetails.length > 0">
+      <div class="card">
+        <div class="boxs mail_listing">
+            <ul style="margin-bottom: 30px;">
+              <li style="padding: 20px; border-bottom: 1px solid #ddd;" *ngFor="let item of supplierDetails">
+                <div style="display: flex;">
+                  <div class="form-line form-check">
+                    <label  class="form-check-label" style="top: -13px;">
+                      <input type="checkbox" name="approve" class="form-check-input" value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, $event)" >
+                      <span class="form-check-sign"><span class="check"></span></span>
+                    </label>
+                  </div>
+                  <h2 style="font-size: 15px; margin-left: 0px;"> Request Id : {{item.reqId}} / {{item.supplierCode}} /{{item.tableName}} - {{item.reqType}} </h2>
+                </div>
+                <ul *ngIf="item.tableName == 'SUP_DETAILS'" style="display: flex;justify-content: space-between;padding-left: 40px;">
+                  <li>
+                    <strong>Supplier Name</strong> : <span>{{item?.details?.supplierCompName || '-N/A-'}}</span>
+                  </li>
+                  <li>
+                    <strong>Registration Type</strong> : <span>{{item?.details?.registrationType || '-N/A-'}}</span>
+                  </li>
+                  <li>
+                    <strong>Registration No.</strong> : <span>{{item?.details?.registrationNo || '-N/A-'}}</span>
+                  </li>
+                  <li>
+                    <strong>Remark</strong> : <span>{{item?.details?.remarks || '-N/A-'}}</span>
+                  </li>
+                </ul>
+
+                <ul *ngIf="item.tableName == 'SUP_DEPARTMENT'" style="display: flex;justify-content: space-between;padding-left: 40px;flex-wrap: wrap;">
+                  <li>
+                    <strong>Department Name</strong> : <span>{{item?.details?.departmentName || '-N/A-'}}</span>
+                  </li>
+
+                  <li>
+                    <strong>Email</strong> : <span>{{item?.details?.email || '-N/A-'}}</span>
+                  </li>
+                  
+                  <li>
+                    <strong>Contact Person</strong> : <span>{{item?.details?.supplierContact1 || '-N/A-'}}</span>
+                  </li>
+
+                  <li>
+                    <strong>Phone No.</strong> : <span>{{item?.details?.phoneno || '-N/A-'}}</span>
+                  </li>
+                
+                </ul>
+
+                <ul *ngIf="item.tableName == 'SUP_ADDRESS'" style="display: flex;justify-content: space-between;padding-left: 40px;flex-wrap: wrap;">
+                  <li>
+                    <strong>Address Type</strong> : <span>{{item?.details?.addressType || '-N/A-'}}</span>
+                  </li>
+
+                  <li>
+                    <strong>Address</strong> : <span>{{item?.details?.address1 || '-N/A-'}}</span>
+                  </li>
+                  
+                  <li>
+                    <strong>Postal Code.</strong> : <span>{{item?.details?.postalCode || '-N/A-'}}</span>
+                  </li>
+
+                  <li>
+                    <strong>Region</strong> : <span>{{item?.details?.region || '-N/A-'}}</span>
+                  </li>
+
+                  <li>
+                    <strong>Country</strong> : <span>{{item?.details?.country || '-N/A-'}}</span>
+                  </li>
+                  
+                  <li>
+                    <strong>City</strong> : <span>{{item?.details?.city || '-N/A-'}}</span>
+                  </li>
+                
+                </ul>
+
+                <ul *ngIf="item.tableName == 'SUP_BANK'" class="bank-details" style="display: flex;justify-content: space-between;padding-left: 40px;flex-wrap: wrap;">
+                  <li>
+                    <strong>Bank Branch</strong> : <span>{{item?.details?.bankBranch || '-N/A-'}}</span>
+                  </li>
+                  <li>
+                    <strong>Bank Name</strong> : <span>{{item?.details?.bankName || '-N/A-'}}</span>
+                  </li>
+                  
+                  <li>
+                    <strong>Cheque No</strong> : <span>{{item?.details?.chequeNo || '-N/A-'}}</span>
+                  </li>
+                  
+                  <li>
+                    <strong>Bank BIC.</strong> : <span>{{item?.details?.bankBic || '-N/A-'}}</span>
+                  </li>
+
+                  <li>
+                    <strong>Bank Account No</strong> : <span>{{item?.details?.bankAccountNo || '-N/A-'}}</span>
+                  </li>
+
+                  <li>
+                    <strong>Account Holder</strong> : <span>{{item?.details?.accountHolder || '-N/A-'}}</span>
+                  </li>
+                  
+                  <li>
+                    <strong>Transit Routing No</strong> : <span>{{item?.details?.transilRoutingNo || '-N/A-'}}</span>
+                  </li>
+                  <li>
+                    <strong>Bank Evidence</strong> : <span>{{item?.details?.bankEvidence || '-N/A-'}}</span>
+                  </li>
+                  <li>
+                    <strong>IFSC Code</strong> : <span>{{item?.details?.ifscCode || '-N/A-'}}</span>
+                  </li>
+                  
+                
+                </ul>
+              </li>
+            </ul>
+            <div style="padding: 0px 20px 20px 20px" >
+              <button type="button" class="btn btn-info m-r-10 waves-effect"  (click)="approvalDetails()" >Approve</button> 
+            </div>
+            <!-- (click)="approve()" -->
+        </div>
+      </div>
+    </div>
+
     <app-taskdetails *ngIf="isDetailsShow && !taskDetails?.parentTaskId" [subTaskLists]="subTasklists" [commentDetails]="commentDetails" [taskId]="taskDetails?.id" [processInstanceId]="taskDetails?.processInstanceId" [involvePeopleList]="involvePeopleList" [contentData]="contentData" (refreshTask)="fetchSingleTask()" (contentRefresh)="fetchContent()" (refreshSubTask)="fetchSubTask()" (deleteContent)="deleteContent($event)"  (refreshComments)="fetchLatestComment()"></app-taskdetails>
   </div>
 </section>
