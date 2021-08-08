@@ -70,6 +70,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
   singleTaskLineItem = {tableData: {}};
   taskId: string;
   formDataLoaded = false;
+  completeApproveLoader = false;
   taskDetails: any = [];
   searchTextString = '';
   commentDetails: any = [];
@@ -139,6 +140,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
     oldWorkunitId = "";
     newWorkunitId = "";
     newPdfViewer = null;
+    supplierDetailsData = [];
   // tslint:disable-next-line:max-line-length
   constructor(private dynamicScriptLoader: DynamicScriptLoaderService, public sanitizer: DomSanitizer, public router: Router,  private route: ActivatedRoute, private DBXHttp: DBXHttpService, private http: Http, private notify: NotificationService, private elementRef: ElementRef, private navService: NavService) {
     this.urldownload = environment.api_endpoint;
@@ -194,7 +196,6 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
   getTaskList() {
     this.http.get('http://65.2.162.230:8088/dev/vendor/pending/request/'+this.taskGetParam).pipe(
       map((response: Response) => response.json())).subscribe((res: any) => {
-     
       this.supplierDetails = res;
       this.supplierDetails = this.supplierDetails.map((ele) => {
         ele.details = this.isJson(ele.newValue) ? JSON.parse(ele.newValue) : {};
@@ -203,13 +204,33 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
       console.log(this.supplierDetails);
     });
   }
+
   detailsValue(id, event) {
     if(event.target.checked) {
-      this.supplierDetails.push(id);
+      this.supplierDetailsData.push(id);
+    } else {
+      this.supplierDetailsData = this.supplierDetailsData.filter(indexValue => id !== indexValue);
     }
   }
+
   approvalDetails() {
-    console.log(this.supplierDetails);
+    this.completeApproveLoader = true;
+    let payload = []; 
+    this.supplierDetailsData.forEach((ele) => {
+      payload.push({
+        id: ele,
+        status: 'APPROVED'
+      });
+    });
+    this.http.post('http://65.2.162.230:8088/dev/vendor/approved', payload).pipe(
+      map((response: Response) => response.json())).subscribe((res: any) => {
+        this.completeApproveLoader = false;
+        this.getTaskList();
+        swal('Success', 'Selected supplier details approve', 'success');
+    }, (err) => {
+        this.completeApproveLoader = false;
+        swal('Error', 'Something went wrong, please try reagain', 'error');
+    });
   }
 
   isJson(str) {

@@ -486,7 +486,7 @@
       <div class="card">
         <div class="boxs mail_listing">
             <ul style="margin-bottom: 30px;">
-              <li style="padding: 20px; border-bottom: 1px solid #ddd;" *ngFor="let item of supplierDetails">
+              <li style="padding: 20px; border-bottom: 1px solid #ddd;" *ngFor="let item of supplierDetails; index as i">
                 <div style="display: flex;">
                   <div class="form-line form-check">
                     <label  class="form-check-label" style="top: -13px;">
@@ -596,7 +596,8 @@
               </li>
             </ul>
             <div style="padding: 0px 20px 20px 20px" >
-              <button type="button" class="btn btn-info m-r-10 waves-effect"  (click)="approvalDetails()" >Approve</button> 
+              <button type="button" [disabled]="completeApproveLoader" class="btn btn-info m-r-10 waves-effect"  (click)="approvalDetails()" >Approve <div *ngIf="completeApproveLoader" class="spinner-border" role="status"></div></button> 
+              
             </div>
             <!-- (click)="approve()" -->
         </div>
