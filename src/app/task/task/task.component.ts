@@ -21,6 +21,7 @@ export class TaskComponent implements OnInit {
   userQueueList: any = [];
   supplierDetails: any = [];
   searchTextString = '';
+  isSupplierApproved = true;
   currentState = 'open';
   selectedTaskItem: any;
   isTaskDataSupplierDetails = false;

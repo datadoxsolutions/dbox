@@ -62,6 +62,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
   isDetailsShow: any = false;
   singleTask: NgForm;
   bindingData = {};
+  isSupplierApproved = true;
   @ViewChild('singleTask') ssingleTask: NgForm;
   @ViewChild('singleTaskPage') singleTaskPage: ElementRef;
   lineItems: any = [];
@@ -162,7 +163,9 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
       this.taskGetParam = [this.taskId];
       this.fetchSingleTask();
       this.fetchSubTask();
-      this.getTaskList();
+      if(this.accountId === 'Supplier Details') {
+        this.getTaskList();
+      }
     });
     if (localStorage.getItem('listofqueue')) {
       this.listOfqueueData  = JSON.parse(localStorage.getItem('listofqueue'));
@@ -199,9 +202,17 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
       this.supplierDetails = res;
       this.supplierDetails = this.supplierDetails.map((ele) => {
         ele.details = this.isJson(ele.newValue) ? JSON.parse(ele.newValue) : {};
+        console.log(ele.tableName, ele.regType, ele);
+        if(ele.tableName == "SUP_DETAILS" && ele.reqType == "CREATE") {
+          this.isSupplierApproved = false;
+        }
         return ele;
       });
-      console.log(this.supplierDetails);
+      if(this.supplierDetails.length == 0) {
+        const route = 'task/' + this.accountId;
+        this.router.navigate([route]);
+      }
+      console.log(this.supplierDetails, this.isSupplierApproved);
     });
   }
 
@@ -228,6 +239,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
         this.getTaskList();
         swal('Success', 'Selected supplier details approve', 'success');
     }, (err) => {
+        this.getTaskList();
         this.completeApproveLoader = false;
         swal('Error', 'Something went wrong, please try reagain', 'error');
     });

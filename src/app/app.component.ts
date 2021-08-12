@@ -91,6 +91,8 @@ export class AppComponent {
             this.selectApp(item);
           }
         }
+        //item.name =  item.name ? item.name.replace("Supplier", "Supp.").replace("Customer", "Cust.").replace("Registration", "Reg.") : item.name;
+        console.log(item);
         return item;
       });
       this.selectedTaskItem = this.auth.isTaskAppSelected();

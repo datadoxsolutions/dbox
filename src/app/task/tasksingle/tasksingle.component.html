@@ -489,8 +489,9 @@
               <li style="padding: 20px; border-bottom: 1px solid #ddd;" *ngFor="let item of supplierDetails; index as i">
                 <div style="display: flex;">
                   <div class="form-line form-check">
+                    <!-- {{item.tableName}} {{!isSupplierApproved}} -->
                     <label  class="form-check-label" style="top: -13px;">
-                      <input type="checkbox" name="approve" class="form-check-input" value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, $event)" >
+                      <input type="checkbox" name="approve" [disabled]="!isSupplierApproved && item.tableName !== 'SUP_DETAILS'" class="form-check-input"  value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, $event)" >
                       <span class="form-check-sign"><span class="check"></span></span>
                     </label>
                   </div>
@@ -603,7 +604,6 @@
         </div>
       </div>
     </div>
-
     <app-taskdetails *ngIf="isDetailsShow && !taskDetails?.parentTaskId" [subTaskLists]="subTasklists" [commentDetails]="commentDetails" [taskId]="taskDetails?.id" [processInstanceId]="taskDetails?.processInstanceId" [involvePeopleList]="involvePeopleList" [contentData]="contentData" (refreshTask)="fetchSingleTask()" (contentRefresh)="fetchContent()" (refreshSubTask)="fetchSubTask()" (deleteContent)="deleteContent($event)"  (refreshComments)="fetchLatestComment()"></app-taskdetails>
   </div>
 </section>
