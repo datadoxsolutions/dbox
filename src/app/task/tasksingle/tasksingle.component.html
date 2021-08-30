@@ -613,10 +613,13 @@
                 <div style="display: flex;">
                   <div class="form-line form-check">
                     <!-- {{item.tableName}} {{!isSupplierApproved}} -->
-                    <label  class="form-check-label" style="top: -13px;">
+                    <label  class="form-check-label" style="top: -13px;" *ngIf="item.status != 'REJECTED' && item.status != 'APPROVED'">
                       <input type="checkbox" name="approve" [disabled]="!isSupplierApproved && item.tableName !== 'SUP_DETAILS'" class="form-check-input"  value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, item, $event)" >
                       <span class="form-check-sign"><span class="check"></span></span>
                     </label>
+
+                    <label class="{{item.status}}" *ngIf="item.status == 'REJECTED' || item.status == 'APPROVED'" style="margin-right: 10px"> {{item.status}} </label>
+                    
                   </div>
                   <div style="display:flex;justify-content: space-between; width:100%; margin-bottom: 10px">
                     <h2 style="font-size: 15px; margin-left: 0px;"> Purchase Order : {{item.poNumber}} / {{item.supplierCode}} </h2>
@@ -624,7 +627,7 @@
                     <h4 style="font-size: 15px; margin-left: 0px;"> Amount : <span style="color:green">{{item.amount | currency}}</span> </h4>
                   </div>
                 </div>
-                <div style="display: flex;justify-content: space-between;padding-left: 40px;">
+                <div style="display: flex;flex-direction: column; justify-content: space-between;padding-left: 40px;">
                   <div style="display: flex;flex-direction: row;justify-content: space-between;width: 100%;">
                       <div class="col-md-3">
                         <h5 style="color: #de3500">Customer Address</h5>
@@ -669,6 +672,10 @@
                           {{item?.billToText?.country ? item?.billToText?.country : "-N/A-" }}
                         </div>
                       </div>
+                  </div>
+                  <div class="col-md-12 mt-3 pt-2" style="border-top: 1px solid #d1d1d1" *ngIf="item.status == 'REJECTED' || item.status == 'APPROVED'">
+                    <h5 style="color: #444">Status Comment</h5>
+                    <div>{{item?.statusComment}}</div>
                   </div>
                   <!-- <li>
                     <strong>Registration Type</strong> : <span>{{item?.details?.registrationType || '-N/A-'}}</span>

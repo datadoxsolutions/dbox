@@ -285,7 +285,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
           this.getPOList();
           this.supplierDetailsData = [];
           this.commentPO = null
-          swal('Success', 'Selected PO approve', 'success');
+          swal('Success', 'Selected PO has been update successfully', 'success');
       }, (err) => {
           this.getPOList();
           this.completeApproveLoader = false;
