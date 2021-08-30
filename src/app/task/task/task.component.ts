@@ -25,6 +25,8 @@ export class TaskComponent implements OnInit {
   currentState = 'open';
   selectedTaskItem: any;
   isTaskDataSupplierDetails = false;
+  customerPO:any  = [];
+  isTaskCustomerPo = false;
   taskGetParam: any = {
     page: 0,
     state: this.currentState,
@@ -44,6 +46,11 @@ export class TaskComponent implements OnInit {
       if(this.accountId == 'Supplier Details') {
         this.isTaskDataSupplierDetails = true
       }
+      if(this.accountId == 'PO Pending List') {
+        this.isTaskCustomerPo = true
+      }
+
+      
       
       console.log("this.accountId", this.accountId);
       if (this.accountId !== 'task') {
@@ -51,6 +58,7 @@ export class TaskComponent implements OnInit {
       }
       this.fetchTask();
       this.fetchSupplierDetails();
+      this.fetchCustomerPO();
     });
   }
 
@@ -64,6 +72,14 @@ export class TaskComponent implements OnInit {
         this.getData();
       }
       this.navService.emitNavChangeEvent(true);
+    });
+  }
+
+  fetchCustomerPO() {
+    this.http.get('http://65.2.162.230:8088/dev/customer/po/pendingCustomer').pipe(
+      map((response: Response) => response.json())).subscribe((res: any) => {
+      this.customerPO = res;
+      console.log(this.customerPO);
     });
   }
 

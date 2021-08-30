@@ -27,7 +27,7 @@
         <div class="card">
           <div class="boxs mail_listing">
             <div class="inbox-center table-responsive">
-              <table *ngIf="!isTaskDataSupplierDetails" class="table table-hover">
+              <table *ngIf="!isTaskDataSupplierDetails && !isTaskCustomerPo" class="table table-hover">
                 <thead>
                   <tr>
                     <!-- <th class="text-center">
@@ -156,6 +156,60 @@
                       class="btn btn-info m-r-10 waves-effect"  *ngIf="!item?.assignee?.id" (click)="submitClaim(item?.id)">Claim</button> 
                       <span *ngIf="item?.assignee?.id"> -N/A- </span>
                     </td> -->
+                  </tr>
+                </tbody>
+              </table>
+
+
+
+              <table *ngIf="isTaskCustomerPo" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th [attr.colspan]="!item?.assignee?.id ? '6' : '6'">
+                      <div class="inbox-header">
+                        <div class="mail-option no-pad-left">
+                          <div class="row col-md-12 email-btn-group">
+                              <div class="col-5 col-md-5 s12">
+                                <input type="text" class="form-control" (input)="searchText($event)" placeholder="Search by id">
+                              </div>
+                              <div class="col-4 col-md-4 s12">
+                                <select (change)="selectedOrder($event)">
+                                  <option value="created-desc" selected>Newest first</option>
+                                  <option value="created-asc">Oldest first</option>
+                                  <option value="due-desc">Due last</option>
+                                  <option value="due-asc">Due first</option>
+                                </select>
+                              </div>
+                              <div class="col-3 col-md-3 text-right switch switch-section">
+                                <label>Open
+                                  <input type="checkbox" (change)="changeStatus($event)">
+                                  <span class="lever"></span>Complete</label>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <thead style="background-color: #4181a9;color: #fff;">
+                  <th class="text-left">Cust. ID</th>
+                  <th class="text-left">PO Number</th>
+                  <th class="text-left">Supplier Code</th>
+                  <th class="text-left">Deliver To</th>
+                  <th class="text-left">Amount</th>
+                  <th class="text-left">Contract Terms</th>
+                  <th class="text-left">Status</th>
+                </thead>
+
+                <tbody>
+                  <tr class="unread" *ngFor="let item of customerPO">
+                    <td class="text-left"> {{item.cId}} </td>
+                    <td class="text-left"><a routerLink="/task/{{accountId}}/{{item.cId}}" > {{item.poNumber}} </a> </td>
+                    <td class="hidden-xs"> {{item.supplierCode || '-N/A-'}} </td>
+                    <td class="hidden-xs"> {{item.deliveryToText || '-N/A-'}} </td>
+                    <td class="hidden-xs"> {{item.amount || '-N/A-'}} </td>
+                    <td class="hidden-xs"> {{item.contractTerms || '-N/A-'}} </td>
+                    <td class="color-orange"> {{item.status}} </td>
                   </tr>
                 </tbody>
               </table>

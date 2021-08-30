@@ -33,7 +33,7 @@
         </div>
       </div>
 
-    <div class="card margin-b-7" *ngIf="supplierDetails.length == 0">
+    <div class="card margin-b-7" *ngIf="supplierDetails.length == 0 && customerPOData.length == 0">
       <div class="boxs mail_listing" id="leftBoxData">
         <div class="row custom-indexer-info first-row">
           <div class="row-d" style="position: relative;">
@@ -165,7 +165,7 @@
       </div>
     </div>
     
-    <div class="row" id="itemContainer" *ngIf="!taskDetails?.parentTaskId && supplierDetails.length == 0" [hidden]="isDetailsShow">
+    <div class="row" id="itemContainer" *ngIf="!taskDetails?.parentTaskId && supplierDetails.length == 0 && customerPOData.length == 0" [hidden]="isDetailsShow">
       <div class="col-xs-12 col-sm-12" [ngClass]="(pdfUrl != undefined) ? 'col-md-4 col-lg-4' : 'col-md-8 col-lg-8'">
         <div class="card">
           <div class="boxs mail_listing">
@@ -604,6 +604,48 @@
         </div>
       </div>
     </div>
+
+    <div class="col-xs-12 col-sm-12" *ngIf="customerPOData.length > 0">
+      <div class="card">
+        <div class="boxs mail_listing">
+            <ul style="margin-bottom: 30px;">
+              <li style="padding: 20px; border-bottom: 1px solid #ddd;" *ngFor="let item of customerPOData; index as i">
+                <div style="display: flex;">
+                  <div class="form-line form-check">
+                    <!-- {{item.tableName}} {{!isSupplierApproved}} -->
+                    <label  class="form-check-label" style="top: -13px;">
+                      <input type="checkbox" name="approve" [disabled]="!isSupplierApproved && item.tableName !== 'SUP_DETAILS'" class="form-check-input"  value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, $event)" >
+                      <span class="form-check-sign"><span class="check"></span></span>
+                    </label>
+                  </div>
+                  <h2 style="font-size: 15px; margin-left: 0px;"> Purchase Order : {{item.poNumber}} / {{item.supplierCode}} </h2>
+                </div>
+                <ul style="display: flex;justify-content: space-between;padding-left: 40px;">
+                  <li>
+                    <strong>Supplier Name</strong> : <span>{{item?.supplierCode || '-N/A-'}}</span>
+                  </li>
+                  <!-- <li>
+                    <strong>Registration Type</strong> : <span>{{item?.details?.registrationType || '-N/A-'}}</span>
+                  </li>
+                  <li>
+                    <strong>Registration No.</strong> : <span>{{item?.details?.registrationNo || '-N/A-'}}</span>
+                  </li>
+                  <li>
+                    <strong>Remark</strong> : <span>{{item?.details?.remarks || '-N/A-'}}</span>
+                  </li> -->
+                </ul>
+              </li>
+            </ul>
+            <div style="padding: 0px 20px 20px 20px" >
+              <button type="button" [disabled]="completeApproveLoader" class="btn btn-info m-r-10 waves-effect"  (click)="approvalDetails()" >Approve <div *ngIf="completeApproveLoader" class="spinner-border" role="status"></div></button> 
+              
+            </div>
+            <!-- (click)="approve()" -->
+        </div>
+      </div>
+    </div>
+
+
     <app-taskdetails *ngIf="isDetailsShow && !taskDetails?.parentTaskId" [subTaskLists]="subTasklists" [commentDetails]="commentDetails" [taskId]="taskDetails?.id" [processInstanceId]="taskDetails?.processInstanceId" [involvePeopleList]="involvePeopleList" [contentData]="contentData" (refreshTask)="fetchSingleTask()" (contentRefresh)="fetchContent()" (refreshSubTask)="fetchSubTask()" (deleteContent)="deleteContent($event)"  (refreshComments)="fetchLatestComment()"></app-taskdetails>
   </div>
 </section>

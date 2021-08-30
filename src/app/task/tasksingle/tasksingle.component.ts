@@ -142,6 +142,8 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
     newWorkunitId = "";
     newPdfViewer = null;
     supplierDetailsData = [];
+    customerPOData = [];
+    isPOApproved = true;
   // tslint:disable-next-line:max-line-length
   constructor(private dynamicScriptLoader: DynamicScriptLoaderService, public sanitizer: DomSanitizer, public router: Router,  private route: ActivatedRoute, private DBXHttp: DBXHttpService, private http: Http, private notify: NotificationService, private elementRef: ElementRef, private navService: NavService) {
     this.urldownload = environment.api_endpoint;
@@ -166,6 +168,11 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
       if(this.accountId === 'Supplier Details') {
         this.getTaskList();
       }
+      if(this.accountId === 'PO Pending List') {
+        this.getPOList();
+      }
+     
+      
     });
     if (localStorage.getItem('listofqueue')) {
       this.listOfqueueData  = JSON.parse(localStorage.getItem('listofqueue'));
@@ -213,6 +220,25 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
         this.router.navigate([route]);
       }
       console.log(this.supplierDetails, this.isSupplierApproved);
+    });
+  }
+
+  getPOList() {
+    this.http.get('http://65.2.162.230:8088/dev/customer/po/pendingCustomer/details/'+this.taskGetParam).pipe(
+      map((response: Response) => response.json())).subscribe((res: any) => {
+      this.customerPOData = res;
+      this.customerPOData = this.customerPOData.map((ele) => {
+        ele.supAddrText = this.isJson(ele.supAddrText) ? JSON.parse(ele.supAddrText) : {};
+        ele.cusAddrText = this.isJson(ele.cusAddrText) ? JSON.parse(ele.cusAddrText) : {};
+        ele.shipToText = this.isJson(ele.shipToText) ? JSON.parse(ele.shipToText) : {};
+        ele.billToText = this.isJson(ele.billToText) ? JSON.parse(ele.billToText) : {};
+        return ele;
+      });
+      if(this.customerPOData.length == 0) {
+        const route = 'task/' + this.accountId;
+        this.router.navigate([route]);
+      }
+      console.log(this.supplierDetails, this.isPOApproved);
     });
   }
 
