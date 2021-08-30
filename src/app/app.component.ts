@@ -117,6 +117,7 @@ export class AppComponent {
 
   findTaskQueue(complatedTask, openTask) {
     const combinedData = complatedTask.concat(openTask);
+    console.log(combinedData);
     let listOfQueue = _.uniq(_.pluck(combinedData, 'name'));
     console.log(listOfQueue);
     var sortingData = ['Indexer', 'Duplicate  Check', 'Matching Process', 'Validation', 'Duplicate Exception', 'Match Exception', 'Approver1', 'Approver2', 'Approval1', 'Approval2', 'Payment'];
@@ -143,6 +144,15 @@ export class AppComponent {
       this.listCountMenu['Supplier Details'] = res ? res.length : 0; 
     });
 
+    if(this.selectedTaskItem.appDefinitionKey == "po_approval") {
+     
+      this.listOfQueue.push("PO Pending List");
+      this.listCountMenu["PO Pending List"] = 0;
+      
+    }
+    console.log("this.listOfQueue", this.listOfQueue);
+
+    console.log("findTaskQueue", this.selectedTaskItem);
    
 
     localStorage.setItem('listofqueue', JSON.stringify(this.listOfQueue));

@@ -70,6 +70,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
   countLineItemColumn: any = 0;
   singleTaskLineItem = {tableData: {}};
   taskId: string;
+  commentPO = null
   formDataLoaded = false;
   completeApproveLoader = false;
   taskDetails: any = [];
@@ -232,43 +233,83 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
         ele.cusAddrText = this.isJson(ele.cusAddrText) ? JSON.parse(ele.cusAddrText) : {};
         ele.shipToText = this.isJson(ele.shipToText) ? JSON.parse(ele.shipToText) : {};
         ele.billToText = this.isJson(ele.billToText) ? JSON.parse(ele.billToText) : {};
+        ele.deliveryToText = this.isJson(ele.deliveryToText) ? ((JSON.parse(ele.deliveryToText) && JSON.parse(ele.deliveryToText)[0].reason) ? JSON.parse(ele.deliveryToText)[0].reason : 'N/A') : ele.deliveryToText;
         return ele;
       });
       if(this.customerPOData.length == 0) {
         const route = 'task/' + this.accountId;
         this.router.navigate([route]);
       }
-      console.log(this.supplierDetails, this.isPOApproved);
+      console.log("customerPOData", this.customerPOData);
     });
   }
 
-  detailsValue(id, event) {
-    if(event.target.checked) {
-      this.supplierDetailsData.push(id);
+  detailsValue(id, item, event) {
+    if(this.accountId === 'PO Pending List') {
+      console.log(item);
+      if(event.target.checked) {
+        this.supplierDetailsData.push(item.poid);
+      } else {
+        this.supplierDetailsData = this.supplierDetailsData.filter(indexValue => item.poid !== indexValue);
+      }
     } else {
-      this.supplierDetailsData = this.supplierDetailsData.filter(indexValue => id !== indexValue);
+      if(event.target.checked) {
+        this.supplierDetailsData.push(id);
+      } else {
+        this.supplierDetailsData = this.supplierDetailsData.filter(indexValue => id !== indexValue);
+      }
     }
   }
 
-  approvalDetails() {
+  approvalDetails(status = "APPROVED") {
     this.completeApproveLoader = true;
-    let payload = []; 
-    this.supplierDetailsData.forEach((ele) => {
-      payload.push({
-        id: ele,
-        status: 'APPROVED'
+    let payload = [];
+    console.log(this.supplierDetailsData) 
+    if(this.accountId === 'PO Pending List') { 
+      if(this.commentPO == null) {
+        
+        swal('Error', 'Please enter the comment', 'error');
+         this.completeApproveLoader = false;
+        return 
+      }
+      this.supplierDetailsData.forEach((ele) => {
+        payload.push({
+          id: ele,
+          comment: this.commentPO,
+          status: status
+        });
       });
-    });
-    this.http.post('http://65.2.162.230:8088/dev/vendor/approved', payload).pipe(
-      map((response: Response) => response.json())).subscribe((res: any) => {
-        this.completeApproveLoader = false;
-        this.getTaskList();
-        swal('Success', 'Selected supplier details approve', 'success');
-    }, (err) => {
-        this.getTaskList();
-        this.completeApproveLoader = false;
-        swal('Error', 'Something went wrong, please try reagain', 'error');
-    });
+      this.http.post('http://65.2.162.230:8088/dev/customer/po/pendingCustomerStatus', payload).pipe(
+        map((response: Response) => response.json())).subscribe((res: any) => {
+          this.completeApproveLoader = false;
+          this.getPOList();
+          this.supplierDetailsData = [];
+          this.commentPO = null
+          swal('Success', 'Selected PO approve', 'success');
+      }, (err) => {
+          this.getPOList();
+          this.completeApproveLoader = false;
+          swal('Error', 'Something went wrong, please try reagain', 'error');
+      }); 
+    } else {
+      this.supplierDetailsData.forEach((ele) => {
+        payload.push({
+          id: ele,
+          status: 'APPROVED'
+        });
+      });
+      this.http.post('http://65.2.162.230:8088/dev/vendor/approved', payload).pipe(
+        map((response: Response) => response.json())).subscribe((res: any) => {
+          this.completeApproveLoader = false;
+          this.supplierDetailsData = [];
+          this.getTaskList();
+          swal('Success', 'Selected supplier details approve', 'success');
+      }, (err) => {
+          this.getTaskList();
+          this.completeApproveLoader = false;
+          swal('Error', 'Something went wrong, please try reagain', 'error');
+      }); 
+    }
   }
 
   isJson(str) {

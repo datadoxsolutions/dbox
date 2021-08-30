@@ -24,7 +24,7 @@
                 </ul>
               </div>
               <ul>
-                <li *ngIf="!taskDetails?.assignee?.id && supplierDetails.length == 0"> <button type="button"
+                <li *ngIf="!taskDetails?.assignee?.id && supplierDetails.length == 0 && customerPOData.length == 0"> <button type="button"
                   class="btn btn-info m-r-10 waves-effect" (click)="submitClaim(taskDetails?.id)">Claim</button> </li>
                   <li *ngIf="taskDetails?.parentTaskId && taskDetails?.endDate == null"> <button type="button"
                     class="btn btn-info m-r-10 waves-effect" (click)="complete()">Complete</button> </li>
@@ -614,16 +614,62 @@
                   <div class="form-line form-check">
                     <!-- {{item.tableName}} {{!isSupplierApproved}} -->
                     <label  class="form-check-label" style="top: -13px;">
-                      <input type="checkbox" name="approve" [disabled]="!isSupplierApproved && item.tableName !== 'SUP_DETAILS'" class="form-check-input"  value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, $event)" >
+                      <input type="checkbox" name="approve" [disabled]="!isSupplierApproved && item.tableName !== 'SUP_DETAILS'" class="form-check-input"  value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, item, $event)" >
                       <span class="form-check-sign"><span class="check"></span></span>
                     </label>
                   </div>
-                  <h2 style="font-size: 15px; margin-left: 0px;"> Purchase Order : {{item.poNumber}} / {{item.supplierCode}} </h2>
+                  <div style="display:flex;justify-content: space-between; width:100%; margin-bottom: 10px">
+                    <h2 style="font-size: 15px; margin-left: 0px;"> Purchase Order : {{item.poNumber}} / {{item.supplierCode}} </h2>
+                    <h4 style="font-size: 15px; margin-left: 0px;"> Delivery To : {{item.deliveryToText}} </h4>
+                    <h4 style="font-size: 15px; margin-left: 0px;"> Amount : <span style="color:green">{{item.amount | currency}}</span> </h4>
+                  </div>
                 </div>
-                <ul style="display: flex;justify-content: space-between;padding-left: 40px;">
-                  <li>
-                    <strong>Supplier Name</strong> : <span>{{item?.supplierCode || '-N/A-'}}</span>
-                  </li>
+                <div style="display: flex;justify-content: space-between;padding-left: 40px;">
+                  <div style="display: flex;flex-direction: row;justify-content: space-between;width: 100%;">
+                      <div class="col-md-3">
+                        <h5 style="color: #de3500">Customer Address</h5>
+                        <div>
+                          {{item?.cusAddrText?.address1 ? item?.cusAddrText?.address1 + "," : "" }}
+                          {{item?.cusAddrText?.city ? item?.cusAddrText?.city + "," : "" }}
+                          {{item?.cusAddrText?.region ? item?.cusAddrText?.region + "-" : "" }}
+                          {{item?.cusAddrText?.postalCode ? item?.cusAddrText?.postalCode + "," : "" }}
+                          {{item?.cusAddrText?.country ? item?.cusAddrText?.country : "-N/A-" }}
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <h5 style="color: #2e54a5">Supplier Address</h5>
+                        <div>
+                          {{item?.supAddrText?.address1 ? item?.supAddrText?.address1 + "," : "" }}
+                          {{item?.supAddrText?.city ? item?.supAddrText?.city + "," : "" }}
+                          {{item?.supAddrText?.region ? item?.supAddrText?.region + "-" : "" }}
+                          {{item?.supAddrText?.postalCode ? item?.supAddrText?.postalCode + "," : "" }}
+                          {{item?.supAddrText?.country ? item?.supAddrText?.country : "-N/A-" }}
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <h5 style="color: #b702b9">Ship To Address</h5>
+                        <div>
+                          {{item?.shipToText?.address1 ? item?.shipToText?.address1 + "," : "" }}
+                          {{item?.shipToText?.city ? item?.shipToText?.city + "," : "" }}
+                          {{item?.shipToText?.region ? item?.shipToText?.region + "-" : "" }}
+                          {{item?.shipToText?.postalCode ? item?.shipToText?.postalCode + "," : "" }}
+                          {{item?.shipToText?.country ? item?.shipToText?.country : "-N/A-" }}
+                        </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <h5 style="color: #2e54a5">Bill To Address</h5>
+                        <div>
+                          {{item?.billToText?.address1 ? item?.billToText?.address1 + "," : "" }}
+                          {{item?.billToText?.city ? item?.billToText?.city + "," : "" }}
+                          {{item?.billToText?.region ? item?.billToText?.region + "-" : "" }}
+                          {{item?.billToText?.postalCode ? item?.billToText?.postalCode + "," : "" }}
+                          {{item?.billToText?.country ? item?.billToText?.country : "-N/A-" }}
+                        </div>
+                      </div>
+                  </div>
                   <!-- <li>
                     <strong>Registration Type</strong> : <span>{{item?.details?.registrationType || '-N/A-'}}</span>
                   </li>
@@ -633,12 +679,18 @@
                   <li>
                     <strong>Remark</strong> : <span>{{item?.details?.remarks || '-N/A-'}}</span>
                   </li> -->
-                </ul>
+                </div>
               </li>
             </ul>
-            <div style="padding: 0px 20px 20px 20px" >
-              <button type="button" [disabled]="completeApproveLoader" class="btn btn-info m-r-10 waves-effect"  (click)="approvalDetails()" >Approve <div *ngIf="completeApproveLoader" class="spinner-border" role="status"></div></button> 
+            <div style="padding: 0px 20px 20px 20px; display:flex;align-items: start;flex-direction: column;" >
               
+              <div class="wrap-input100 validate-input" style="width: 400px" data-validate="comment is required">
+                <input type="text" class="form-control" placeholder="Please enter the comment" class="input100" type="text" name="commentPO"  [(ngModel)]="commentPO">
+              </div>
+              <div>
+                <button type="button" [disabled]="completeApproveLoader" class="btn btn-info m-r-10 waves-effect"  (click)="approvalDetails('APPROVED')" >Approve <div *ngIf="completeApproveLoader" class="spinner-border" role="status"></div></button>
+                <button type="button" [disabled]="completeApproveLoader" class="btn btn-danger m-r-10 waves-effect"  (click)="approvalDetails('REJECTED')" >Reject <div *ngIf="completeApproveLoader" class="spinner-border" role="status"></div></button>
+              </div> 
             </div>
             <!-- (click)="approve()" -->
         </div>
