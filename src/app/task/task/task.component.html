@@ -205,7 +205,7 @@
                   <tr class="unread" *ngFor="let item of customerPO">
                     <td class="text-left"><a routerLink="/task/{{accountId}}/{{item.cId}}" > {{item.cId}}  </a> </td>
                     <!-- <td class="text-left"><a routerLink="/task/{{accountId}}/{{item.cId}}" > {{item.poNumber}} </a> </td> -->
-                    <td class="hidden-xs"><a routerLink="/task/{{accountId}}/{{item.cId}}" > {{item?.customerName || '-N/A-'}}</a> </td>
+                    <td class="hidden-xs"><a routerLink="/task/{{accountId}}/{{item.cId}}" > {{item?.customerName || 'Hyundai'}}</a> </td>
                     <td class="hidden-xs"> {{item.deliveryToText || '-N/A-'}} </td>
                     <td class="hidden-xs"> {{(item.amount | currency) || '-N/A-'}} </td>
                     <td class="hidden-xs"> {{item.contractTerms || '-N/A-'}} </td>
