@@ -613,12 +613,12 @@
                 <div style="display: flex;">
                   <div class="form-line form-check">
                     <!-- {{item.tableName}} {{!isSupplierApproved}} -->
-                    <label  class="form-check-label" style="top: -13px;" *ngIf="item.status != 'REJECTED' && item.status != 'APPROVED' && item.status != 'CORRECTION_NEED'">
+                    <label  class="form-check-label" style="top: -13px;" *ngIf="item?.purchesOrder.status != 'REJECTED_BY_IT' && item?.purchesOrder.status != 'APPROVED_BY_IT' && item?.purchesOrder.status != 'CORRECTION_NEED'">
                       <input type="checkbox" name="approve" [disabled]="!isSupplierApproved && item.tableName !== 'SUP_DETAILS'" class="form-check-input"  value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, item, $event)" >
                       <span class="form-check-sign"><span class="check"></span></span>
                     </label>
 
-                    <label class="{{item.status}}" *ngIf="item.status == 'REJECTED' || item.status == 'APPROVED' || item.status == 'CORRECTION_NEED'" style="margin-right: 10px"> {{item.status}} </label>
+                    <label class="{{item?.purchesOrder.status}}" *ngIf="item?.purchesOrder.status == 'REJECTED_BY_IT' || item?.purchesOrder.status == 'APPROVED_BY_IT' || item?.purchesOrder.status == 'CORRECTION_NEED'" style="margin-right: 10px"> {{item?.purchesOrder.status}} </label>
                     
                   </div>
                   <div style="display:flex;justify-content: space-between; width:100%; margin-bottom: 10px">
@@ -710,7 +710,7 @@
                       </tbody>
                     </table>
                   </div>
-                  <div class="col-md-12 mt-3 pt-2" style="border-top: 1px solid #d1d1d1" *ngIf="item.status == 'REJECTED' || item.status == 'APPROVED' || item.status == 'CORRECTION_NEED'">
+                  <div class="col-md-12 mt-3 pt-2" style="border-top: 1px solid #d1d1d1" *ngIf="item.status == 'REJECTED_BY_IT' || item.status == 'APPROVED_BY_IT' || item.status == 'CORRECTION_NEED'">
                     <h5 style="color: #444">Status Comment</h5>
                     <div>{{item?.statusComment}}</div>
                   </div>

@@ -248,7 +248,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
     if(this.accountId === 'PO Pending List') {
       console.log(item);
       if(event.target.checked) {
-        this.supplierDetailsData.push(item.poid);
+        this.supplierDetailsData.push(item.purchesOrder.poid);
       } else {
         this.supplierDetailsData = this.supplierDetailsData.filter(indexValue => item.poid !== indexValue);
       }
