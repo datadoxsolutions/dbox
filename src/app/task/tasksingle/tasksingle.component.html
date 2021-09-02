@@ -491,7 +491,7 @@
                   <div class="form-line form-check">
                     <!-- {{item.tableName}} {{!isSupplierApproved}} -->
                     <label  class="form-check-label" style="top: -13px;">
-                      <input type="checkbox" name="approve" [disabled]="!isSupplierApproved && item.tableName !== 'SUP_DETAILS'" class="form-check-input"  value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, $event)" >
+                      <input type="checkbox" name="approve" [disabled]="!isSupplierApproved && item.tableName !== 'SUP_DETAILS'" class="form-check-input"  value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, item, $event)" >
                       <span class="form-check-sign"><span class="check"></span></span>
                     </label>
                   </div>
@@ -613,18 +613,18 @@
                 <div style="display: flex;">
                   <div class="form-line form-check">
                     <!-- {{item.tableName}} {{!isSupplierApproved}} -->
-                    <label  class="form-check-label" style="top: -13px;" *ngIf="item.status != 'REJECTED' && item.status != 'APPROVED'">
+                    <label  class="form-check-label" style="top: -13px;" *ngIf="item.status != 'REJECTED' && item.status != 'APPROVED' && item.status != 'CORRECTION_NEED'">
                       <input type="checkbox" name="approve" [disabled]="!isSupplierApproved && item.tableName !== 'SUP_DETAILS'" class="form-check-input"  value="{{item.reqId}}" id="is-{{item.id}}" (click)="detailsValue(item.reqId, item, $event)" >
                       <span class="form-check-sign"><span class="check"></span></span>
                     </label>
 
-                    <label class="{{item.status}}" *ngIf="item.status == 'REJECTED' || item.status == 'APPROVED'" style="margin-right: 10px"> {{item.status}} </label>
+                    <label class="{{item.status}}" *ngIf="item.status == 'REJECTED' || item.status == 'APPROVED' || item.status == 'CORRECTION_NEED'" style="margin-right: 10px"> {{item.status}} </label>
                     
                   </div>
                   <div style="display:flex;justify-content: space-between; width:100%; margin-bottom: 10px">
-                    <h2 style="font-size: 15px; margin-left: 0px;"> Purchase Order : {{item.poNumber}} / {{item.supplierCode}} </h2>
-                    <h4 style="font-size: 15px; margin-left: 0px;"> Delivery To : {{item.deliveryToText}} </h4>
-                    <h4 style="font-size: 15px; margin-left: 0px;"> Amount : <span style="color:green">{{item.amount | currency}}</span> </h4>
+                    <h2 style="font-size: 15px; margin-left: 0px;"> Purchase Order : {{item.purchesOrder.poNumber}} / {{item.purchesOrder.supplierCode}} </h2>
+                    <h4 style="font-size: 15px; margin-left: 0px;"> Delivery To : {{item.purchesOrder.deliveryToText}} </h4>
+                    <h4 style="font-size: 15px; margin-left: 0px;"> Amount : <span style="color:green">{{item.purchesOrder.amount | currency}}</span> </h4>
                   </div>
                 </div>
                 <div style="display: flex;flex-direction: column; justify-content: space-between;padding-left: 40px;">
@@ -632,48 +632,85 @@
                       <div class="col-md-3">
                         <h5 style="color: #de3500">Customer Address</h5>
                         <div>
-                          {{item?.cusAddrText?.address1 ? item?.cusAddrText?.address1 + "," : "" }}
-                          {{item?.cusAddrText?.city ? item?.cusAddrText?.city + "," : "" }}
-                          {{item?.cusAddrText?.region ? item?.cusAddrText?.region + "-" : "" }}
-                          {{item?.cusAddrText?.postalCode ? item?.cusAddrText?.postalCode + "," : "" }}
-                          {{item?.cusAddrText?.country ? item?.cusAddrText?.country : "-N/A-" }}
+                          {{item?.purchesOrder?.cusAddrText?.address1 ? item?.purchesOrder?.cusAddrText?.address1 + "," : "" }}
+                          {{item?.purchesOrder?.cusAddrText?.city ? item?.purchesOrder?.cusAddrText?.city + "," : "" }}
+                          {{item?.purchesOrder?.cusAddrText?.region ? item?.purchesOrder?.cusAddrText?.region + "-" : "" }}
+                          {{item?.purchesOrder?.cusAddrText?.postalCode ? item?.purchesOrder?.cusAddrText?.postalCode + "," : "" }}
+                          {{item?.purchesOrder?.cusAddrText?.country ? item?.purchesOrder?.cusAddrText?.country : "-N/A-" }}
                         </div>
                       </div>
 
                       <div class="col-md-3">
                         <h5 style="color: #2e54a5">Supplier Address</h5>
                         <div>
-                          {{item?.supAddrText?.address1 ? item?.supAddrText?.address1 + "," : "" }}
-                          {{item?.supAddrText?.city ? item?.supAddrText?.city + "," : "" }}
-                          {{item?.supAddrText?.region ? item?.supAddrText?.region + "-" : "" }}
-                          {{item?.supAddrText?.postalCode ? item?.supAddrText?.postalCode + "," : "" }}
-                          {{item?.supAddrText?.country ? item?.supAddrText?.country : "-N/A-" }}
+                          {{item?.purchesOrder?.supAddrText?.address1 ? item?.purchesOrder?.supAddrText?.address1 + "," : "" }}
+                          {{item?.purchesOrder?.supAddrText?.city ? item?.purchesOrder?.supAddrText?.city + "," : "" }}
+                          {{item?.purchesOrder?.supAddrText?.region ? item?.purchesOrder?.supAddrText?.region + "-" : "" }}
+                          {{item?.purchesOrder?.supAddrText?.postalCode ? item?.purchesOrder?.supAddrText?.postalCode + "," : "" }}
+                          {{item?.purchesOrder?.supAddrText?.country ? item?.purchesOrder?.supAddrText?.country : "-N/A-" }}
                         </div>
                       </div>
 
                       <div class="col-md-3">
                         <h5 style="color: #b702b9">Ship To Address</h5>
                         <div>
-                          {{item?.shipToText?.address1 ? item?.shipToText?.address1 + "," : "" }}
-                          {{item?.shipToText?.city ? item?.shipToText?.city + "," : "" }}
-                          {{item?.shipToText?.region ? item?.shipToText?.region + "-" : "" }}
-                          {{item?.shipToText?.postalCode ? item?.shipToText?.postalCode + "," : "" }}
-                          {{item?.shipToText?.country ? item?.shipToText?.country : "-N/A-" }}
+                          {{item?.purchesOrder?.shipToText?.address1 ? item?.purchesOrder?.shipToText?.address1 + "," : "" }}
+                          {{item?.purchesOrder?.shipToText?.city ? item?.purchesOrder?.shipToText?.city + "," : "" }}
+                          {{item?.purchesOrder?.shipToText?.region ? item?.purchesOrder?.shipToText?.region + "-" : "" }}
+                          {{item?.purchesOrder?.shipToText?.postalCode ? item?.purchesOrder?.shipToText?.postalCode + "," : "" }}
+                          {{item?.purchesOrder?.shipToText?.country ? item?.purchesOrder?.shipToText?.country : "-N/A-" }}
                         </div>
                       </div>
 
                       <div class="col-md-3">
                         <h5 style="color: #2e54a5">Bill To Address</h5>
                         <div>
-                          {{item?.billToText?.address1 ? item?.billToText?.address1 + "," : "" }}
-                          {{item?.billToText?.city ? item?.billToText?.city + "," : "" }}
-                          {{item?.billToText?.region ? item?.billToText?.region + "-" : "" }}
-                          {{item?.billToText?.postalCode ? item?.billToText?.postalCode + "," : "" }}
-                          {{item?.billToText?.country ? item?.billToText?.country : "-N/A-" }}
+                          {{item?.purchesOrder?.billToText?.address1 ? item?.purchesOrder?.billToText?.address1 + "," : "" }}
+                          {{item?.purchesOrder?.billToText?.city ? item?.purchesOrder?.billToText?.city + "," : "" }}
+                          {{item?.purchesOrder?.billToText?.region ? item?.purchesOrder?.billToText?.region + "-" : "" }}
+                          {{item?.purchesOrder?.billToText?.postalCode ? item?.purchesOrder?.billToText?.postalCode + "," : "" }}
+                          {{item?.purchesOrder?.billToText?.country ? item?.purchesOrder?.billToText?.country : "-N/A-" }}
                         </div>
                       </div>
+
                   </div>
-                  <div class="col-md-12 mt-3 pt-2" style="border-top: 1px solid #d1d1d1" *ngIf="item.status == 'REJECTED' || item.status == 'APPROVED'">
+                  <div style="margin-top: 10px;border-top: 1px solid #444;">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Sr.</th>
+                          <th>Qty</th>
+                          <th>Description </th>
+                          <th>Category</th>
+                          <th>Sub Category</th>
+                          <th>Brand</th>
+                          <th>Currency</th>
+                          <th>Unit Price</th>
+                          <th>Gross Price</th>
+                          <th>Tax</th>
+                          <th>Amount</th>
+                          <th>Total Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let i of item.purchesOrderItems; let k = index">
+                          <td>{{k+1}}</td>
+                          <td>{{i.qty}}</td>
+                          <td>{{i.itemDescription}}</td>
+                          <td>{{i.itemCategoryText}}</td>
+                          <td>{{i.itemSubcategoryText}}</td>
+                          <td>{{i.itemBrandText}}</td>
+                          <td>{{i.curType}}</td>
+                          <td>{{i.unitPrice | currency}}</td>
+                          <td>{{i.itemGross | currency}}</td>
+                          <td>{{(i.tax/1000) | percent}}</td>
+                          <td>{{i.itemTotal | currency}}</td>
+                          <td>{{i.amount | currency}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-md-12 mt-3 pt-2" style="border-top: 1px solid #d1d1d1" *ngIf="item.status == 'REJECTED' || item.status == 'APPROVED' || item.status == 'CORRECTION_NEED'">
                     <h5 style="color: #444">Status Comment</h5>
                     <div>{{item?.statusComment}}</div>
                   </div>
@@ -695,8 +732,9 @@
                 <input type="text" class="form-control" placeholder="Please enter the comment" class="input100" type="text" name="commentPO"  [(ngModel)]="commentPO">
               </div>
               <div>
-                <button type="button" [disabled]="completeApproveLoader" class="btn btn-info m-r-10 waves-effect"  (click)="approvalDetails('APPROVED')" >Approve <div *ngIf="completeApproveLoader" class="spinner-border" role="status"></div></button>
-                <button type="button" [disabled]="completeApproveLoader" class="btn btn-danger m-r-10 waves-effect"  (click)="approvalDetails('REJECTED')" >Reject <div *ngIf="completeApproveLoader" class="spinner-border" role="status"></div></button>
+                <button type="button" [disabled]="completeApproveLoader" class="btn btn-success m-r-10 waves-effect"  (click)="approvalDetails('APPROVED_BY_IT')" >Approve<div *ngIf="completeApproveLoader" class="spinner-border" role="status"></div></button>
+                <button type="button" [disabled]="completeApproveLoader" class="btn btn-danger m-r-10 waves-effect"  (click)="approvalDetails('REJECTED_BY_IT')" >Reject<div *ngIf="completeApproveLoader" class="spinner-border" role="status"></div></button>
+                <button type="button" [disabled]="completeApproveLoader" class="btn btn-info m-r-10 waves-effect"  (click)="approvalDetails('CORRECTION_NEED')" >Correction Required<div *ngIf="completeApproveLoader" class="spinner-border" role="status"></div></button>
               </div> 
             </div>
             <!-- (click)="approve()" -->

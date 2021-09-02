@@ -229,11 +229,11 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
       map((response: Response) => response.json())).subscribe((res: any) => {
       this.customerPOData = res;
       this.customerPOData = this.customerPOData.map((ele) => {
-        ele.supAddrText = this.isJson(ele.supAddrText) ? JSON.parse(ele.supAddrText) : {};
-        ele.cusAddrText = this.isJson(ele.cusAddrText) ? JSON.parse(ele.cusAddrText) : {};
-        ele.shipToText = this.isJson(ele.shipToText) ? JSON.parse(ele.shipToText) : {};
-        ele.billToText = this.isJson(ele.billToText) ? JSON.parse(ele.billToText) : {};
-        ele.deliveryToText = this.isJson(ele.deliveryToText) ? ((JSON.parse(ele.deliveryToText) && JSON.parse(ele.deliveryToText)[0].reason) ? JSON.parse(ele.deliveryToText)[0].reason : 'N/A') : ele.deliveryToText;
+        ele.purchesOrder.supAddrText = this.isJson(ele.purchesOrder.supAddrText) ? JSON.parse(ele.purchesOrder.supAddrText) : {};
+        ele.purchesOrder.cusAddrText = this.isJson(ele.purchesOrder.cusAddrText) ? JSON.parse(ele.purchesOrder.cusAddrText) : {};
+        ele.purchesOrder.shipToText = this.isJson(ele.purchesOrder.shipToText) ? JSON.parse(ele.purchesOrder.shipToText) : {};
+        ele.purchesOrder.billToText = this.isJson(ele.purchesOrder.billToText) ? JSON.parse(ele.purchesOrder.billToText) : {};
+        ele.purchesOrder.deliveryToText = this.isJson(ele.purchesOrder.deliveryToText) ? ((JSON.parse(ele.purchesOrder.deliveryToText) && JSON.parse(ele.purchesOrder.deliveryToText)[0].reason) ? JSON.parse(ele.purchesOrder.deliveryToText)[0].reason : 'N/A') : ele.purchesOrder.deliveryToText;
         return ele;
       });
       if(this.customerPOData.length == 0) {
@@ -258,6 +258,7 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
       } else {
         this.supplierDetailsData = this.supplierDetailsData.filter(indexValue => id !== indexValue);
       }
+      console.log(this.supplierDetails);
     }
   }
 
@@ -267,7 +268,6 @@ export class TasksingleComponent implements OnInit, AfterViewInit {
     console.log(this.supplierDetailsData) 
     if(this.accountId === 'PO Pending List') { 
       if(this.commentPO == null) {
-        
         swal('Error', 'Please enter the comment', 'error');
          this.completeApproveLoader = false;
         return 

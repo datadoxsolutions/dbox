@@ -193,8 +193,8 @@
                 </thead>
                 <thead style="background-color: #4181a9;color: #fff;">
                   <th class="text-left">Cust. ID</th>
-                  <th class="text-left">PO Number</th>
-                  <th class="text-left">Supplier Code</th>
+                  <!-- <th class="text-left">PO Number</th> -->
+                  <th class="text-left">Customer Name</th>
                   <th class="text-left">Deliver To</th>
                   <th class="text-left">Amount</th>
                   <th class="text-left">Contract Terms</th>
@@ -203,9 +203,9 @@
 
                 <tbody>
                   <tr class="unread" *ngFor="let item of customerPO">
-                    <td class="text-left"> {{item.cId}} </td>
-                    <td class="text-left"><a routerLink="/task/{{accountId}}/{{item.cId}}" > {{item.poNumber}} </a> </td>
-                    <td class="hidden-xs"> {{item.supplierCode || '-N/A-'}} </td>
+                    <td class="text-left"><a routerLink="/task/{{accountId}}/{{item.cId}}" > {{item.cId}}  </a> </td>
+                    <!-- <td class="text-left"><a routerLink="/task/{{accountId}}/{{item.cId}}" > {{item.poNumber}} </a> </td> -->
+                    <td class="hidden-xs"><a routerLink="/task/{{accountId}}/{{item.cId}}" > {{item?.customerName || '-N/A-'}}</a> </td>
                     <td class="hidden-xs"> {{item.deliveryToText || '-N/A-'}} </td>
                     <td class="hidden-xs"> {{item.amount || '-N/A-'}} </td>
                     <td class="hidden-xs"> {{item.contractTerms || '-N/A-'}} </td>

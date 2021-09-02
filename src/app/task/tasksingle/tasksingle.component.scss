@@ -335,9 +335,12 @@ ul.steps-indicator.horizontal  li a .label {
   background-color: #ece9e9 !important;
   color: #444;
 }
-.APPROVED {
+.APPROVED, .APPROVED_BY_IT {
   color: green;
 }
-.REJECTED {
+.REJECTED, .REJECTED_BY_IT {
   color: RED;
+}
+.CORRECTION_NEED {
+  color: #00b0e4;
 }
